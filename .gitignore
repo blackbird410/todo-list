@@ -1,0 +1,8 @@
+node_modules
+package.json
+package-lock.json
+index.js.swp
+data.js.swp
+style.css.swp
+webpack.config.js
+
