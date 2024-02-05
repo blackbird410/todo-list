@@ -1,0 +1,183 @@
+
+@import url('https://unpkg.com/css.gg@2.0.0/icons/css/user-list.css');
+@import url('https://unpkg.com/css.gg@2.0.0/icons/css/list.css');
+@import url('https://unpkg.com/css.gg@2.0.0/icons/css/calendar-due.css');
+@import url('https://unpkg.com/css.gg@2.0.0/icons/css/media-live.css');
+@import url('https://unpkg.com/css.gg@2.0.0/icons/css/add.css');
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,900&display=swap');
+
+
+:root {
+	--mainFont: 'Roboto', sans-serif, helvetica;
+}
+
+body {
+	display: grid;
+	justify-content: center;
+	margin: 0;
+	padding: 1rem;
+	background-color: #080B12;
+	color: white;
+	font-family: var(--mainFont);
+	overflow-y: hidden;
+}
+
+#content {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1rem;
+}
+
+.my-day-header {
+	font-size: 2rem;
+	font-weight: bold;
+}
+
+
+.header-quote,
+.weekday,
+.month {
+	opacity: 0.6;
+}
+
+.welcome-msg::after {
+	content: '.';
+	color: #0096FF;
+	font-size: 3rem;
+}
+
+.my-day-status {
+	width: 100%;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	font-size: 1.2rem;
+	gap: 1rem;
+}
+
+.date-wrapper {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.week-number {
+	font-size: 4rem;
+}
+
+.tasks-wrapper {
+	height: 32%;
+	display: flex;
+	flex-direction: column;
+	overflow-y: scroll;
+	gap: 16px;
+}
+
+.task-wrapper {
+	display: grid;
+	grid-template-rows: repeat(auto-fit, minmax(30px, 1fr));
+	grid-template-columns: 20px 1fr;
+	gap: 0.1rem 1rem;
+	padding: 1rem;
+}
+
+.task-checkbox {
+	grid-row: 1 / 5;
+}
+
+.task-title {
+	font-size: 1.5rem;
+	font-weight: bold;
+}
+
+.task-due-date::before {
+	content: "Due date: ";
+	color: #FF474C;
+}
+
+.priority-1 {
+	color: #B2FFFF;
+}
+
+.priority-2 {
+	color: #1877F2;
+}
+
+.priority-3{
+	color: #00BFFF;
+}
+
+.task-note {
+	font-style: italic;
+}
+
+.input-wrapper {
+	width: max(80%, 400px);
+	display: grid;
+	grid-template-rows: 35px;
+	grid-template-columns: 20px 1fr;
+	align-items: center;
+	gap: 0.5rem;
+	border-radius: 16px;
+	border: 2px solid lightgray;
+	padding-left: 0.5rem;
+}
+
+#task-input {
+	outline: none;
+	background: inherit;
+	border: none;
+	color: white;
+}
+
+#setting-icon,
+.sidebar {
+	position: fixed;
+	justify-self: start;
+}
+
+#setting-icon {
+	width: 40px;
+	height: auto;
+	filter: invert(1);
+	margin: 1rem auto auto 1rem;
+}
+
+#setting-icon:hover {
+	filter: drop-shadow(0 0 15px red) invert(100%);
+}
+
+.sidebar,
+.sidebar > div {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	gap: 1rem;
+	padding: 1rem;
+}
+
+.sidebar {
+	margin-top: 5%;
+}
+
+.folder-wrapper {
+	display: flex;
+	gap: 1rem;
+} 
+
+.folder-wrapper:hover,
+.title-wrapper:hover i  {
+	color: #00BFFF;
+	cursor: pointer;
+}
+
+.title-wrapper {
+	display: grid;
+	grid-template-columns: 2fr 1fr;
+}
+
+.title-wrapper i {
+	justify-self: end;
+}
