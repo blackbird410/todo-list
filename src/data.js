@@ -85,11 +85,15 @@ class Sidebar {
 		this.titleWrapper.appendChild(this.title);
 		this.icon = document.createElement('i');
 		this.icon.classList.add('gg-add');
+		this.icon.addEventListener('click', displayListForm);
 		this.titleWrapper.appendChild(this.icon);
 		
 		this.userList.appendChild(this.titleWrapper);
+		userFolders.forEach(folder => {
+			const f = new SidebarFolder(folder);
+			this.userList.appendChild(f.wrapper);
+		});
 		this.wrapper.appendChild(this.userList);
-
 	}
 }
 
@@ -178,6 +182,37 @@ class Task {
 	}
 }
 
+class ListForm {
+	constructor() {
+		this.form = document.createElement('form');
+		this.form.id = 'list-form';
+		this.form.noValidate = true;
+
+		this.input = document.createElement('input');
+		this.input.id = 'list-name';
+		this.input.name = 'list-name';
+		this.input.placeholder = 'Add list name';
+		this.form.appendChild(this.input);
+
+		this.btnWrapper = document.createElement('div');
+		this.btnWrapper.classList.add('btn-wrapper');
+		this.btnSave = document.createElement('button');
+		this.btnSave.id = 'add-list-btn';
+		this.btnSave.textContent = 'Save'
+		this.btnSave.addEventListener('click', addFolder);
+		this.btnWrapper.appendChild(this.btnSave);
+
+		this.btnCancel = document.createElement('button');
+		this.btnCancel.id = 'cancel-btn';
+		this.btnCancel.name = 'cancel-btn';
+		this.btnCancel.textContent = 'Cancel';
+		this.btnCancel.addEventListener('click', removeForm);
+		this.btnWrapper.appendChild(this.btnCancel);
+
+		this.form.appendChild(this.btnWrapper);
+	}
+}
+
 export function displayContent()
 {
 	const content = document.createElement('div');
@@ -220,13 +255,37 @@ export function displayContent()
 	input.placeholder = "Add task";
 	inputWrapper.appendChild(input);
 	content.appendChild(inputWrapper);
-	content.addEventListener('mouseover', () => {
+/*	content.addEventListener('mouseover', () => {
 		let sidebar = document.querySelector('.sidebar');
 		if (sidebar != null)
 			sidebar.remove();
-	});
+	});*/
+	displaySidebar();
+	document.body.appendChild(new ListForm().form)
 	
 	document.body.appendChild(content);
+}
+
+function addFolder() {
+	const folderName = document.querySelector('#list-name').value;
+	if (folderName != null)
+	{
+		
+	}
+}
+
+function removeForm() {
+	const form = document.querySelector('form');
+	if(form != null)
+		form.remove();
+}
+
+function displayListForm() {
+	if (document.querySelector('#list-form') == null)
+	{
+		const listForm = new ListForm();
+		document.body.appendChild(listForm.form);
+	}
 }
 
 function displaySidebar() {
