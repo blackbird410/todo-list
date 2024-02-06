@@ -264,7 +264,7 @@ form #cancel-btn:hover {
 
 @media only screen and (max-width: 600px) {
 	.sidebar {
-		background-color: var(--designColor);
+		background-color: darkgray;
 		width: 70%;
 	}
 
