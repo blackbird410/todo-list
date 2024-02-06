@@ -90,10 +90,6 @@ class SidebarFolder {
 		this.count.textContent = folder.files;
 		this.wrapper.appendChild(this.count);
 	
-		this.removeIcon = document.createElement('i');
-		this.removeIcon.classList.add('gg-remove');
-		this.removeIcon.addEventListener('click', removeUserList);
-		this.wrapper.appendChild(this.removeIcon);
 	}
 }
 
@@ -128,6 +124,11 @@ class Sidebar {
 		this.wrapper.appendChild(this.titleWrapper);
 		userFolders.forEach(folder => {
 			const f = new SidebarFolder(folder);
+
+			const removeIcon = document.createElement('i');
+			removeIcon.classList.add('gg-remove');
+			removeIcon.addEventListener('click', removeUserList);
+			f.wrapper.appendChild(removeIcon);
 			this.userList.appendChild(f.wrapper);
 		});
 		this.wrapper.appendChild(this.userList);
@@ -312,6 +313,7 @@ function removeUserList(e) {
 		{
 			userFolders.splice(i, 1);
 			e.currentTarget.parentElement.remove();
+			break;
 		}
 	}
 }

@@ -161,7 +161,6 @@ form,
 }
 
 .sidebar {
-	margin-top: 5%;
 	backdrop-filter: blur(10px);
 	width: 350px;
 	height: 100%;
@@ -266,5 +265,10 @@ form #cancel-btn:hover {
 @media only screen and (max-width: 600px) {
 	.sidebar {
 		background-color: var(--designColor);
+		width: 70%;
+	}
+
+	#content {
+		padding: 20% 1rem 1rem 1rem;
 	}
 }
