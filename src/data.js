@@ -35,6 +35,36 @@ let userFolders = [
 		"iconClass": "",
 		"files": "1",
 	},
+	{
+		"title": "Personal",
+		"iconClass": "",
+		"files": "3",
+	},
+	{
+		"title": "Work",
+		"iconClass": "",
+		"files": "2",
+	},
+	{
+		"title": "Grocery List",
+		"iconClass": "",
+		"files": "1",
+	},
+	{
+		"title": "Personal",
+		"iconClass": "",
+		"files": "3",
+	},
+	{
+		"title": "Work",
+		"iconClass": "",
+		"files": "2",
+	},
+	{
+		"title": "Grocery List",
+		"iconClass": "",
+		"files": "1",
+	},
 ]
 
 class SidebarFolder {
@@ -59,6 +89,11 @@ class SidebarFolder {
 		this.count.classList.add('file-count');
 		this.count.textContent = folder.files;
 		this.wrapper.appendChild(this.count);
+	
+		this.removeIcon = document.createElement('i');
+		this.removeIcon.classList.add('gg-remove');
+		this.removeIcon.addEventListener('click', removeUserList);
+		this.wrapper.appendChild(this.removeIcon);
 	}
 }
 
@@ -80,15 +115,17 @@ class Sidebar {
 
 		this.titleWrapper =  document.createElement('div');
 		this.titleWrapper.classList.add('title-wrapper');
+		
 		this.title = document.createElement('div');
 		this.title.textContent =  'My lists';
 		this.titleWrapper.appendChild(this.title);
+
 		this.icon = document.createElement('i');
 		this.icon.classList.add('gg-add');
-		this.icon.addEventListener('click', displayListForm);
+		this.icon.addEventListener('click', displayListForm);	
 		this.titleWrapper.appendChild(this.icon);
-		
-		this.userList.appendChild(this.titleWrapper);
+	
+		this.wrapper.appendChild(this.titleWrapper);
 		userFolders.forEach(folder => {
 			const f = new SidebarFolder(folder);
 			this.userList.appendChild(f.wrapper);
@@ -255,22 +292,45 @@ export function displayContent()
 	input.placeholder = "Add task";
 	inputWrapper.appendChild(input);
 	content.appendChild(inputWrapper);
-/*	content.addEventListener('mouseover', () => {
+	content.addEventListener('mouseover', () => {
 		let sidebar = document.querySelector('.sidebar');
 		if (sidebar != null)
 			sidebar.remove();
-	});*/
+	});
 	displaySidebar();
-	document.body.appendChild(new ListForm().form)
-	
+
 	document.body.appendChild(content);
 }
 
+
+function removeUserList(e) {
+	const target = e.currentTarget.parentElement.querySelector('.folder-title').textContent;
+
+	for(let i = 0; i < userFolders.length; i++)
+	{
+		if (userFolders[i].title == target)
+		{
+			userFolders.splice(i, 1);
+			console.log(userFolders);
+			e.currentTarget.parentElement.remove();
+		}
+	}
+}
+
+
 function addFolder() {
 	const folderName = document.querySelector('#list-name').value;
-	if (folderName != null)
+	if (folderName != '')
 	{
-		
+		userFolders.push(
+		{
+			"title": folderName,
+			"iconClass": "",
+			"files": "0",
+		});
+		document.querySelector('.sidebar').remove();
+		displaySidebar();
+		removeForm();
 	}
 }
 

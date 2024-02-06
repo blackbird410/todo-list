@@ -1,4 +1,5 @@
 
+@import url('https://unpkg.com/css.gg@2.0.0/icons/css/remove.css');
 @import url('https://unpkg.com/css.gg@2.0.0/icons/css/user-list.css');
 @import url('https://unpkg.com/css.gg@2.0.0/icons/css/list.css');
 @import url('https://unpkg.com/css.gg@2.0.0/icons/css/calendar-due.css');
@@ -162,12 +163,23 @@ form,
 
 .sidebar {
 	margin-top: 5%;
+	backdrop-filter: blur(10px);
+	width: 350px;
+	height: 100%;
+	z-index: 2;
 }
 
+.sidebar .title-wrapper,
 .folder-wrapper {
 	display: flex;
+	justify-content: space-between;
 	gap: 1rem;
 } 
+
+.user-list {
+	overflow-y: scroll;
+	height: 50%;
+}
 
 .folder-wrapper:hover,
 .title-wrapper:hover i  {
@@ -175,13 +187,26 @@ form,
 	cursor: pointer;
 }
 
-.title-wrapper {
-	display: grid;
-	grid-template-columns: 2fr 1fr;
+.sidebar .title-wrapper {
+	flex-direction: row;
+	font-size: 1.5rem;
+	border-bottom: 2px solid white;
 }
 
 .title-wrapper i {
 	justify-self: end;
+}
+
+.file-count {
+	display: flex;
+	border: 1px solid  var(--designColor);
+	padding: 5px;
+	border-radius: 50%;
+	width: 15px;
+	height: 15px;
+	align-items: center;
+	justify-content: center;
+	font-weight: bold;
 }
 
 form {
@@ -233,4 +258,8 @@ form #cancel-btn {
 
 form #cancel-btn:hover {
 	color: red;
+}
+
+.gg-remove {
+	justify-content: end;
 }
