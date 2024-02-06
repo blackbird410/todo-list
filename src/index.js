@@ -1,4 +1,4 @@
 import './style.css'
-import { displayContent } from './data.js';
+import { displayMain } from './functions.js';
 
-displayContent();
+displayMain();
