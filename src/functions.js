@@ -33,8 +33,9 @@ export function displayMyDay()
 
 	const tasksWrapper = document.createElement('div');
 	tasksWrapper.classList.add('tasks-wrapper');
-	const tasks = getTasks();
-	tasks.forEach(task => {
+	
+	const myDayTasks = getMyDayTasks();
+	myDayTasks.forEach(task => {
 		tasksWrapper.appendChild(task.wrapper);
 	});
 	content.appendChild(tasksWrapper);
@@ -69,8 +70,15 @@ export function displayMyWeek()
 
 	const content = document.createElement('div');
 	content.id = "content";
+
+	const weekTasks = getWeekTasks();
+
 	
 	document.body.appendChild(content);
+}
+
+function getWeekTasks() {
+	
 }
 
 export function displayMyTasks() {	
@@ -136,17 +144,17 @@ function displaySidebar() {
 	}
 }
 
-function getTasks() {
+function formatTasks(tasks) {
+	// Tranform the tasks objects into DOM elements
+
 	let taskList = [];
-	let sortedTasks = getSortedTasks();
-	sortedTasks.forEach(task => {
+	tasks.forEach(task => {
 		taskList.push(new Task(task));
 	});
 	return taskList;
 };
 
-function getSortedTasks() {
-	let a = tasks;
+function sortTasks(a) {
 	let nTasks = a.length;
 	let i, j;
 
@@ -154,7 +162,7 @@ function getSortedTasks() {
 	{
 		for(j = i+1; j < nTasks; j++)
 		{
-			if (shouldSwap(a[i], a[j]))
+			if (new Date(a[i].dueDate) > new Date(a[j].dueDate))
 				swap(a[i], a[j]);
 		}
 	}
@@ -190,19 +198,30 @@ function swap(a, b)
 	b.checklist = temp;
 }
 
-function shouldSwap(first, second) {
-	// Compare the time of both and return true if a is scheduled later than b
-	let a = first.dueDate;
-	let b = second.dueDate;
-	let timeA = (a.split(' ')[1] == 'PM') ? Number(a.split(' ')[0].split(':').join('')) + 1200 : Number(a.split(' ')[0].split(':').join(''));
+function getDayStatus() {
+	const myDayTasks = getMyDayTasks();
+	let	n = myDayTasks.length;
 
-	let timeB = (b.split(' ')[1] == 'PM') ? Number(b.split(' ')[0].split(':').join('')) + 1200 : Number(b.split(' ')[0].split(':').join(''));
-
-	return timeA > timeB;
+	switch(n)
+	{
+		case 0:
+			return "You have no event scheduled for today";
+		case 1:
+			return "You have one event scheduled for today";
+		default:
+			return `You have ${n} events scheduled for today`;
+	}
 }
 
-function getDayStatus() {
-	return "You have no event scheduled for today";
+function getMyDayTasks() {
+	let myDayTasks = [];
+
+	tasks.forEach(task => {
+		if (new Date(task.dueDate).toLocaleDateString() == new Date().toLocaleDateString())
+			myDayTasks.push(task);
+	});
+
+	return formatTasks(sortTasks(myDayTasks));
 }
 
 function getDate() {	

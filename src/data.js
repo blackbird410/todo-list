@@ -208,7 +208,7 @@ const tasks = [
 	{
 		"title": "Practice Chinese",
 		"description": "Practice writing Chinese characters for 30 minutes.",
-		"dueDate": "9:00 PM",
+		"dueDate": "Tue Feb 06 2024 23:43:09",
 		"priority": "1",
 		"notes": "Chapter 5",
 		"checklist": "",
@@ -216,7 +216,7 @@ const tasks = [
 	{
 		"title": "Cook dinner",
 		"description": "Today we have noodles on the menu.",
-		"dueDate": "3:00 PM",
+		"dueDate": "Mon Feb 05 2024 16:00:00",
 		"priority": "2",
 		"notes": "Use mushrooms, green pepper and onions",
 		"checklist": "",
@@ -224,7 +224,7 @@ const tasks = [
 	{
 		"title": "Exercise",
 		"description": "Five sets of 20 push-ups, five-sets of 20 squats",
-		"dueDate": "5:00 PM",
+		"dueDate": "Thu Feb 07 2024 18:00:00",
 		"priority": "3",
 		"notes": "Go hard, go fast and be strong.",
 		"checklist": "",
@@ -232,7 +232,7 @@ const tasks = [
 	{
 		"title": "Buy fruits",
 		"description": "Buy 7 apples and some bananas for around 150 NTD.",
-		"dueDate": "7:00 PM",
+		"dueDate": "Thu Feb 07 2024 08:00:00",
 		"priority": "2",
 		"notes": "Eat at least one fruit per day and you won't have to visit the med before a long time.",
 		"checklist": "",
@@ -303,6 +303,6 @@ let userFolders = [
 		"iconClass": "",
 		"files": "1",
 	},
-]
+];
 
 export { Sidebar, ListForm, Task, MyDayHeader, MyDayStatus, defaultFolders, userFolders, tasks, quotes, settingIcon };

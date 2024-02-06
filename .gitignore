@@ -4,5 +4,6 @@ package-lock.json
 src/.index.js.swp
 src/.data.js.swp
 src/.style.css.swp
+src/.functions.js.swp
 webpack.config.js
 
