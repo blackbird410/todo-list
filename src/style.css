@@ -18,7 +18,6 @@ body {
 	display: grid;
 	justify-content: center;
 	margin: 0;
-	padding: 1rem;
 	background-color: #080B12;
 	color: white;
 	font-family: var(--mainFont);
@@ -262,4 +261,10 @@ form #cancel-btn:hover {
 
 .gg-remove {
 	justify-content: end;
+}
+
+@media only screen and (max-width: 600px) {
+	.sidebar {
+		background-color: var(--designColor);
+	}
 }

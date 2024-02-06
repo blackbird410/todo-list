@@ -311,7 +311,6 @@ function removeUserList(e) {
 		if (userFolders[i].title == target)
 		{
 			userFolders.splice(i, 1);
-			console.log(userFolders);
 			e.currentTarget.parentElement.remove();
 		}
 	}
