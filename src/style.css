@@ -112,6 +112,10 @@ body {
 	color: #00BFFF;
 }
 
+.task-completed {
+	color: #0BDA51;
+}
+
 .task-note {
 	font-style: italic;
 }

@@ -266,4 +266,29 @@ function getUsername() {
 	return "Neil";
 };
 
-export { removeUserList, addFolder, removeForm, displayListForm, displaySidebar };
+function removeTask(taskTitle) {
+	for (let i = 0; i < tasks.length; i++)
+	{
+		if (tasks[i].title == taskTitle)
+		{
+			tasks.splice(i, 1);
+			break;
+		}
+	}
+}
+
+function setTaskComplete(e) {
+	const target = e.currentTarget.parentElement;
+	target.classList.add('task-completed');
+
+	const targetTask = target.querySelector('.task-title').textContent;
+	removeTask(targetTask);
+	document.querySelector('.my-day-status-msg').textContent = getDayStatus();
+
+
+	target.remove();
+
+
+}
+
+export { removeUserList, addFolder, removeForm, displayListForm, displaySidebar, getMyDayTasks, setTaskComplete };

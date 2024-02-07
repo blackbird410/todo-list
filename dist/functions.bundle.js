@@ -135,7 +135,7 @@ eval("module.exports = __webpack_require__.p + \"d8c3bae9051e03eb1018.png\";\n\n
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __webpack_require__("./src/data.js");
+/******/ 	var __webpack_exports__ = __webpack_require__("./src/functions.js");
 /******/ 	
 /******/ })()
 ;

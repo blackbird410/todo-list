@@ -1,5 +1,6 @@
 import settingIcon from './setting.png';
-import { removeUserList, addFolder, removeForm, displayMyDay, displayMyWeek, displayMyTasks, displayListForm } from './functions.js';
+import { removeUserList, addFolder, removeForm, displayMyDay, displayMyWeek, 
+			displayMyTasks, displayListForm, getMyDayTasks, setTaskComplete } from './functions.js';
 
 class SidebarFolder {
 	constructor(folder) {
@@ -21,7 +22,16 @@ class SidebarFolder {
 
 		this.count = document.createElement('div');
 		this.count.classList.add('file-count');
-		this.count.textContent = folder.files;
+
+		switch(folder.title)
+		{
+			case "My day":
+				this.count.textContent = getMyDayTasks().length;
+				break;
+			default:
+				this.count.textContent = folder.files;
+				break;
+		}
 		this.wrapper.appendChild(this.count);
 	
 	}
@@ -144,6 +154,7 @@ class Task {
 		this.checkBtn.id = taskId;
 		this.checkBtn.name = taskId;
 		this.checkBtn.value = task.title;
+		this.checkBtn.addEventListener('click', setTaskComplete);
 		this.wrapper.appendChild(this.checkBtn);
 
 		this.title = document.createElement('div');
@@ -204,7 +215,7 @@ const quotes = [
 	"Remove doubts with actions",
 ];
 
-const tasks = [
+let tasks = [
 	{
 		"title": "Practice Chinese",
 		"description": "Practice writing Chinese characters for 30 minutes.",
