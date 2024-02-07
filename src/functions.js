@@ -336,7 +336,7 @@ function getDailyQuote(quotes) {
 }
 
 function getWelcomeMessage() {
-	return `Good ${getPeriodOfTheDay()}, ${getUsername()}`;
+	return `Good ${getPeriodOfTheDay()}`;
 };
 
 

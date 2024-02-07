@@ -327,6 +327,8 @@ export class TaskInput {
 export const quotes = [
 	"Be so good no one can ignore you",
 	"Remove doubts with actions",
+	"Run your day or your day will run you",
+	"What’s your plan for today?",
 ];
 
 export let tasks = [
