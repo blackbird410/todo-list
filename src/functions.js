@@ -279,9 +279,7 @@ function swap(a, b)
 }
 
 function getDayStatus() {
-	const myDayTasks = getMyDayTasks();
-	let	n = myDayTasks.length;
-
+	const n = getMyDayTasks(new Date()).length;
 	switch(n)
 	{
 		case 0:
