@@ -1,6 +1,6 @@
 import settingIcon from './setting.png';
 import { removeUserList, addFolder, addTask, removeForm, displayMyDay, displayMyWeek, 
-			displayMyTasks, displayListForm, displayTaskForm, getMyDayTasks, setTaskComplete, today, getDay } from './functions.js';
+			displayMyTasks, displayListForm, displayTaskForm, getMyDayTasks, setTaskComplete, today, getDay, inputDay } from './functions.js';
 
 const MIN_PRIORITY = 1;
 const MAX_PRIORITY = 3;
@@ -240,7 +240,7 @@ export class TaskForm {
 				case "DueDate":
 					input.type = 'date';
 					input.min = today();
-					input.value = today();
+					input.value = inputDay;
 					wrapper.appendChild(input);
 
 					const time = document.createElement('input');
@@ -311,7 +311,7 @@ export class TaskInput {
 		this.wrapper.appendChild(icon);
 
 		const input = document.createElement('input');
-		input.id = 'task-input';
+		input.classList.add('task-input');
 		input.name = 'task-input';
 		input.placeholder = "Add task";
 		this.wrapper.appendChild(input);

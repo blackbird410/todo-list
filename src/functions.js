@@ -73,12 +73,15 @@ export function displayMyWeek()
 	// We start appending from today
 	// So get the tasks of each day
 	const weekTasks = getWeekTasks();
+	let i = 1;
 	weekTasks.forEach(day => {
 		const dailyTasks = new DailyTasks(day);
+		dailyTasks.wrapper.id = `day-${i}`;
+		i++;
 		content.appendChild(dailyTasks.wrapper);
 	});
 
-	content.classList.add('grid-row');
+	content.classList.add('grid-row', 'my-week');
 	
 	document.body.appendChild(content);
 	addTaskbarListener();
@@ -147,9 +150,16 @@ export function addTask(e) {
 				"checklist": "",
 			}
 		);
-		displayMyDay();
+		refreshPage();
 		removeForm();
 	}
+}
+
+function refreshPage() {
+	if (document.querySelector('.my-week'))
+		displayMyWeek();
+	else 
+		displayMyDay();
 }
 
 function addFolder() {
@@ -193,9 +203,10 @@ function displaySidebar() {
 	}
 }
 
-export function displayTaskForm() {
+export function displayTaskForm(e) {
 	if (document.querySelector('#task-form') == null)
 	{
+		setTheDay(e);
 		const taskForm = new TaskForm();
 		document.body.appendChild(taskForm.form);
 	}
@@ -365,6 +376,21 @@ function today() {
 	let d = new Date().toLocaleDateString().split('/');
 	return `${d[2]}-${(d[0] < 10) ? `0${d[0]}` : d[0]}-${(d[1] < 10) ? `0${d[1]}` : d[1]}`;
 
+}
+
+export let inputDay = "";
+function setTheDay(e) {
+	let d = e.currentTarget.parentElement.querySelector('.day-title');
+	if (d != null)
+	{
+		d = Number(e.currentTarget.parentElement.id.split('-')[1]) - 1;
+		let currentDate = new Date();
+		currentDate.setDate(currentDate.getDate() + d);
+		d = currentDate.toLocaleDateString().split('/');
+		inputDay = `${d[2]}-${(d[0] < 10) ? `0${d[0]}` : d[0]}-${(d[1] < 10) ? `0${d[1]}` : d[1]}`;
+	}
+	else
+		inputDay = today();
 }
 
 export { removeUserList, addFolder, removeForm, displayListForm, displaySidebar, getMyDayTasks, setTaskComplete, today };
