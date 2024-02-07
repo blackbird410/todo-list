@@ -11,7 +11,6 @@ export function displayMain()
 	mainIcon.addEventListener('mouseover', displaySidebar);
 	document.body.appendChild(mainIcon);
     displayMyDay();
-	displayMyWeek();
 }
 
 export function displayMyDay()

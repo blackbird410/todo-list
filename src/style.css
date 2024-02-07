@@ -100,16 +100,16 @@ body {
 	color: #FF474C;
 }
 
-.priority-3 {
-	color: #B2FFFF;
+.priority-1 {
+	color: red;
 }
 
 .priority-2 {
-	color: #1877F2;
+	color: yellow;
 }
 
-.priority-1 {
-	color: #00BFFF;
+.priority-3 {
+	color: lightgreen;
 }
 
 .task-completed {
