@@ -1,6 +1,6 @@
 import settingIcon from './setting.png';
 import { removeUserList, addFolder, addTask, removeForm, displayMyDay, displayMyWeek, 
-			displayMyTasks, displayListForm, getMyDayTasks, setTaskComplete, today } from './functions.js';
+			displayMyTasks, displayListForm, displayTaskForm, getMyDayTasks, setTaskComplete, today, getDay } from './functions.js';
 
 const MIN_PRIORITY = 1;
 const MAX_PRIORITY = 3;
@@ -282,6 +282,42 @@ export class TaskForm {
 	}
 }
 
+export class DailyTasks {
+	constructor(myTasks) {
+		this.wrapper = document.createElement('div');
+		this.wrapper.classList.add('daily-task-wrapper');
+		
+		this.dayTitle = document.createElement('div');
+		this.dayTitle.classList.add('day-title');
+		this.dayTitle.textContent = myTasks.day;
+		this.wrapper.appendChild(this.dayTitle);
+
+		myTasks.tasks.forEach(task => {
+			this.wrapper.appendChild(task.wrapper);
+		});
+
+		this.wrapper.appendChild(new TaskInput().wrapper);
+	}
+}
+
+export class TaskInput {
+	constructor() {
+		this.wrapper = document.createElement('div');
+		this.wrapper.classList.add('input-wrapper');
+		this.wrapper.addEventListener('click', displayTaskForm);
+
+		const icon = document.createElement('i');
+		icon.classList.add('gg-add');
+		this.wrapper.appendChild(icon);
+
+		const input = document.createElement('input');
+		input.id = 'task-input';
+		input.name = 'task-input';
+		input.placeholder = "Add task";
+		this.wrapper.appendChild(input);
+	}
+}
+
 export const quotes = [
 	"Be so good no one can ignore you",
 	"Remove doubts with actions",
@@ -291,7 +327,7 @@ export let tasks = [
 	{
 		"title": "Practice Chinese",
 		"description": "Practice writing Chinese characters for 30 minutes.",
-		"dueDate": "Tue Feb 06 2024 23:43:09",
+		"dueDate": "Thu Feb 08 2024 23:43:09",
 		"priority": "1",
 		"notes": "Chapter 5",
 		"checklist": "",
@@ -299,7 +335,7 @@ export let tasks = [
 	{
 		"title": "Cook dinner",
 		"description": "Today we have noodles on the menu.",
-		"dueDate": "Mon Feb 05 2024 16:00:00",
+		"dueDate": "Fri Feb 09 2024 16:00:00",
 		"priority": "2",
 		"notes": "Use mushrooms, green pepper and onions",
 		"checklist": "",
@@ -307,7 +343,7 @@ export let tasks = [
 	{
 		"title": "Exercise",
 		"description": "Five sets of 20 push-ups, five-sets of 20 squats",
-		"dueDate": "Thu Feb 07 2024 18:00:00",
+		"dueDate": "Sat Feb 10 2024 18:00:00",
 		"priority": "3",
 		"notes": "Go hard, go fast and be strong.",
 		"checklist": "",
@@ -315,7 +351,7 @@ export let tasks = [
 	{
 		"title": "Buy fruits",
 		"description": "Buy 7 apples and some bananas for around 150 NTD.",
-		"dueDate": "Thu Feb 07 2024 08:00:00",
+		"dueDate": "Sun Feb 11 2024 08:00:00",
 		"priority": "2",
 		"notes": "Eat at least one fruit per day and you won't have to visit the med before a long time.",
 		"checklist": "",

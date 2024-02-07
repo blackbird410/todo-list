@@ -289,6 +289,31 @@ form #cancel-btn:hover {
 	justify-content: end;
 }
 
+#content.grid-row {
+	overflow-x: scroll;
+	grid-template-rows: 1fr;
+	grid-template-columns: repeat(7, 400px);
+	padding: 1rem;
+	padding-left: 4rem;
+}
+
+.daily-task-wrapper {
+	grid-row: 1 / -1;
+	border: 2px solid white;
+	border-radius: 16px;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 1rem;
+	gap: 1rem;
+}
+
+.day-title {
+	font-size: 2rem;
+	font-weight: bold;
+}
+
 @media only screen and (max-width: 600px) {
 	.sidebar {
 		background-color: var(--bgColor);

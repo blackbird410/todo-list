@@ -1,5 +1,7 @@
-import { Sidebar, ListForm, TaskForm, Task, MyDayHeader, MyDayStatus, 
+import { Sidebar, ListForm, TaskForm, Task, TaskInput, DailyTasks, MyDayHeader, MyDayStatus, 
     defaultFolders, userFolders, tasks, quotes, settingIcon } from "./data.js";
+
+const DATE_STRING_BOUND = 24;
 
 export function displayMain()
 {
@@ -9,6 +11,7 @@ export function displayMain()
 	mainIcon.addEventListener('mouseover', displaySidebar);
 	document.body.appendChild(mainIcon);
     displayMyDay();
+	displayMyWeek();
 }
 
 export function displayMyDay()
@@ -33,34 +36,27 @@ export function displayMyDay()
 	const tasksWrapper = document.createElement('div');
 	tasksWrapper.classList.add('tasks-wrapper');
 	
-	const myDayTasks = getMyDayTasks();
+	const myDay = new Date().toString().slice(0, 24);
+	const myDayTasks = getMyDayTasks(myDay);
 	myDayTasks.forEach(task => {
 		task.dueDate.textContent = new Date(task.dueDate.textContent).toLocaleTimeString();
 		tasksWrapper.appendChild(task.wrapper);
 	});
 	content.appendChild(tasksWrapper);
 
-	const inputWrapper = document.createElement('div');
-	inputWrapper.classList.add('input-wrapper');
-	inputWrapper.addEventListener('click', displayTaskForm);
-
-	const icon = document.createElement('i');
-	icon.classList.add('gg-add');
-	inputWrapper.appendChild(icon);
-
-	const input = document.createElement('input');
-	input.id = 'task-input';
-	input.name = 'task-input';
-	input.placeholder = "Add task";
-	inputWrapper.appendChild(input);
+	const inputWrapper = new TaskInput().wrapper;
 	content.appendChild(inputWrapper);
+	document.body.appendChild(content);
+	addTaskbarListener();
+}
+
+function addTaskbarListener() {
+	const content = document.querySelector("#content");
 	content.addEventListener('mouseover', () => {
 		let sidebar = document.querySelector('.sidebar');
 		if (sidebar != null)
 			sidebar.remove();
 	});
-
-	document.body.appendChild(content);
 }
 
 export function displayMyWeek()
@@ -72,14 +68,39 @@ export function displayMyWeek()
 	const content = document.createElement('div');
 	content.id = "content";
 
+	// Here we will add objects to the container for the 7 next days
+	// Each Container should have the task for the specified day
+	// We start appending from today
+	// So get the tasks of each day
 	const weekTasks = getWeekTasks();
+	weekTasks.forEach(day => {
+		const dailyTasks = new DailyTasks(day);
+		content.appendChild(dailyTasks.wrapper);
+	});
 
+	content.classList.add('grid-row');
 	
 	document.body.appendChild(content);
+	addTaskbarListener();
 }
 
 function getWeekTasks() {
-	
+	let currentDate;
+	let weekTasks = [];
+
+	for (let d = 0; d < 7; d++)
+	{
+		currentDate = new Date();
+		currentDate.setDate(currentDate.getDate() + d);
+		currentDate = currentDate.toString().slice(0, DATE_STRING_BOUND);
+		weekTasks.push(
+		{
+			"day": getDay(currentDate),
+			"tasks": getMyDayTasks(currentDate),
+		});
+	}
+
+	return weekTasks;
 }
 
 export function displayMyTasks() {	
@@ -172,7 +193,7 @@ function displaySidebar() {
 	}
 }
 
-function displayTaskForm() {
+export function displayTaskForm() {
 	if (document.querySelector('#task-form') == null)
 	{
 		const taskForm = new TaskForm();
@@ -249,11 +270,11 @@ function getDayStatus() {
 	}
 }
 
-function getMyDayTasks() {
+function getMyDayTasks(date) {
 	let myDayTasks = [];
 
 	tasks.forEach(task => {
-		if (new Date(task.dueDate).toLocaleDateString() == new Date().toLocaleDateString())
+		if (new Date(task.dueDate).toLocaleDateString() == new Date(date).toLocaleDateString())
 			myDayTasks.push(task);
 	});
 
@@ -267,6 +288,23 @@ function getDate() {
 		"number": Number(d[2]),
 		"month": d[1],
 	};
+}
+
+function getDay(d) {
+	let day = new Date(d).toDateString().split(' ').splice(0,3)[0];
+
+	switch(day) {
+		case "Tue":
+			return "Tuesday";
+		case "Wed":
+			return "Wednesday";
+		case "Thu":
+			return "Thursday";
+		case "Sat":
+			return "Saturday";
+		default:
+			return day + "day";
+	}
 }
 
 function getDailyQuote(quotes) {
