@@ -1,6 +1,6 @@
 import settingIcon from './setting.png';
 import { removeUserList, addFolder, addTask, removeForm, displayMyDay, displayMyWeek, 
-			displayMyTasks, displayListForm, displayTaskForm, getMyDayTasks, setTaskComplete, today, getDay, inputDay } from './functions.js';
+			displayMyTasks, displayListForm, displayTaskForm, getMyDayTasks, setTaskComplete, today, getDay, inputDay, weekTasksCount } from './functions.js';
 
 const MIN_PRIORITY = 1;
 const MAX_PRIORITY = 3;
@@ -29,7 +29,13 @@ export class SidebarFolder {
 		switch(folder.title)
 		{
 			case "My day":
-				this.count.textContent = getMyDayTasks().length;
+				this.count.textContent = getMyDayTasks(new Date()).length;
+				break;
+			case "Next 7 days":
+				this.count.textContent = weekTasksCount();
+				break;
+			case "All my tasks":
+				this.count.textContent = tasks.length;
 				break;
 			default:
 				this.count.textContent = folder.files;

@@ -106,6 +106,19 @@ function getWeekTasks() {
 	return weekTasks;
 }
 
+export function weekTasksCount() {
+	let endDate = new Date();
+	endDate.setDate(endDate.getDate() + 6);
+
+	let count = 0;
+	tasks.forEach(task => {
+		if (new Date(task.dueDate) <  endDate)
+			count++;
+	});
+
+	return count;
+}
+
 export function displayMyTasks() {	
 	const previousContent = document.querySelector("#content");
 	if (previousContent != null)
