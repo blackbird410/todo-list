@@ -1,4 +1,4 @@
-import { Sidebar, ListForm, Task, MyDayHeader, MyDayStatus, 
+import { Sidebar, ListForm, TaskForm, Task, MyDayHeader, MyDayStatus, 
     defaultFolders, userFolders, tasks, quotes, settingIcon } from "./data.js";
 
 export function displayMain()
@@ -9,7 +9,6 @@ export function displayMain()
 	mainIcon.addEventListener('mouseover', displaySidebar);
 	document.body.appendChild(mainIcon);
     displayMyDay();
-
 }
 
 export function displayMyDay()
@@ -36,12 +35,14 @@ export function displayMyDay()
 	
 	const myDayTasks = getMyDayTasks();
 	myDayTasks.forEach(task => {
+		task.dueDate.textContent = new Date(task.dueDate.textContent).toLocaleTimeString();
 		tasksWrapper.appendChild(task.wrapper);
 	});
 	content.appendChild(tasksWrapper);
 
 	const inputWrapper = document.createElement('div');
 	inputWrapper.classList.add('input-wrapper');
+	inputWrapper.addEventListener('click', displayTaskForm);
 
 	const icon = document.createElement('i');
 	icon.classList.add('gg-add');
@@ -106,16 +107,43 @@ function removeUserList(e) {
 	}
 }
 
+export function addTask(e) {
+	e.preventDefault();
+	const title = document.querySelector('form #title').value;
+	let date = document.querySelector("form #duedate").value; 
+	let time = document.querySelector("form #duetime").value;
+	date = new Date(date + ' ' + time).toString().slice(0, 24);
+
+	if (title != '')
+	{
+		tasks.push(
+			{
+				"title": title,
+				"description": document.querySelector("form #description").value,
+				"dueDate": date,
+				"priority": document.querySelector("form #priority").value,
+				"notes": document.querySelector("form #notes").value,
+				"checklist": "",
+			}
+		);
+		displayMyDay();
+		removeForm();
+	}
+}
+
 function addFolder() {
+	e.preventDefault();
 	const folderName = document.querySelector('#list-name').value;
 	if (folderName != '')
 	{
 		userFolders.push(
-		{
-			"title": folderName,
-			"iconClass": "",
-			"files": "0",
-		});
+			{
+				"title": folderName,
+				"iconClass": "",
+				"files": "0",
+			}
+		);
+
 		document.querySelector('.sidebar').remove();
 		displaySidebar();
 		removeForm();
@@ -141,6 +169,14 @@ function displaySidebar() {
 	{
 		const sidebar = new Sidebar(defaultFolders, userFolders);
 		document.body.appendChild(sidebar.wrapper);
+	}
+}
+
+function displayTaskForm() {
+	if (document.querySelector('#task-form') == null)
+	{
+		const taskForm = new TaskForm();
+		document.body.appendChild(taskForm.form);
 	}
 }
 
@@ -284,11 +320,13 @@ function setTaskComplete(e) {
 	const targetTask = target.querySelector('.task-title').textContent;
 	removeTask(targetTask);
 	document.querySelector('.my-day-status-msg').textContent = getDayStatus();
-
-
 	target.remove();
+}
 
+function today() {
+	let d = new Date().toLocaleDateString().split('/');
+	return `${d[2]}-${(d[0] < 10) ? `0${d[0]}` : d[0]}-${(d[1] < 10) ? `0${d[1]}` : d[1]}`;
 
 }
 
-export { removeUserList, addFolder, removeForm, displayListForm, displaySidebar, getMyDayTasks, setTaskComplete };
+export { removeUserList, addFolder, removeForm, displayListForm, displaySidebar, getMyDayTasks, setTaskComplete, today };

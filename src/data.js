@@ -1,8 +1,11 @@
 import settingIcon from './setting.png';
-import { removeUserList, addFolder, removeForm, displayMyDay, displayMyWeek, 
-			displayMyTasks, displayListForm, getMyDayTasks, setTaskComplete } from './functions.js';
+import { removeUserList, addFolder, addTask, removeForm, displayMyDay, displayMyWeek, 
+			displayMyTasks, displayListForm, getMyDayTasks, setTaskComplete, today } from './functions.js';
 
-class SidebarFolder {
+const MIN_PRIORITY = 1;
+const MAX_PRIORITY = 3;
+
+export class SidebarFolder {
 	constructor(folder) {
 		this.wrapper = document.createElement('div');
 		this.wrapper.classList.add('folder-wrapper');
@@ -37,7 +40,7 @@ class SidebarFolder {
 	}
 }
 
-class Sidebar {
+export class Sidebar {
 	constructor(defaultFolders, userFolders) {
 		this.wrapper = document.createElement('div');
 		this.wrapper.classList.add('sidebar');
@@ -93,7 +96,7 @@ class Sidebar {
 	}
 }
 
-class MyDayHeader {
+export class MyDayHeader {
 	constructor(welcomeText, message) {
 		this.wrapper = document.createElement('div');
 		this.wrapper.classList.add('my-day-header');
@@ -110,7 +113,7 @@ class MyDayHeader {
 	}
 }
 
-class MyDayStatus {
+export class MyDayStatus {
 	constructor(date, message) {
 		this.wrapper = document.createElement('div');
 		this.wrapper.classList.add('my-day-status');
@@ -141,7 +144,7 @@ class MyDayStatus {
 	}
 }
 
-class Task {
+export class Task {
 	constructor(task) {
 		this.wrapper = document.createElement('div');
 		this.wrapper.classList.add('task-wrapper', `priority-${task.priority}`);
@@ -179,7 +182,7 @@ class Task {
 	}
 }
 
-class ListForm {
+export class ListForm {
 	constructor() {
 		this.form = document.createElement('form');
 		this.form.id = 'list-form';
@@ -210,12 +213,81 @@ class ListForm {
 	}
 }
 
-const quotes = [
+export class TaskForm {
+	constructor() {
+		this.form = document.createElement('form');
+		this.form.id = 'task-form';
+		this.form.noValidate = true;
+
+		const fields = ['Title', 'Description', 'DueDate', 'Priority', 'Notes',];
+
+		fields.forEach(field => {
+			const wrapper = document.createElement('div');
+			wrapper.classList.add('field-wrapper');
+
+			const id = field.toLowerCase();
+
+			const label = document.createElement('label');
+			label.setAttribute('for', id);
+			label.textContent = field;
+			wrapper.appendChild(label);
+
+			const input = document.createElement('input');
+			input.id = id;
+			input.name = id;
+			switch(field)
+			{
+				case "DueDate":
+					input.type = 'date';
+					input.min = today();
+					input.value = today();
+					wrapper.appendChild(input);
+
+					const time = document.createElement('input');
+					time.type = 'time';
+					time.id = 'duetime';
+					time.name = 'duetime';
+					time.value= '08:00:00';
+					wrapper.appendChild(time);
+					break;
+				case "Priority":
+					input.type = 'number';
+					input.min = MIN_PRIORITY;
+					input.max = MAX_PRIORITY;
+					input.value = MIN_PRIORITY;
+				default:
+					wrapper.appendChild(input);
+					break;
+			}
+			this.form.appendChild(wrapper);	
+		});
+
+		
+		this.btnWrapper = document.createElement('div');
+		this.btnWrapper.classList.add('btn-wrapper');
+		this.btnSave = document.createElement('button');
+		this.btnSave.id = 'add-task-btn';
+		this.btnSave.textContent = 'Save'
+		this.btnSave.addEventListener('click', addTask);
+		this.btnWrapper.appendChild(this.btnSave);
+
+		this.btnCancel = document.createElement('button');
+		this.btnCancel.id = 'cancel-btn';
+		this.btnCancel.name = 'cancel-btn';
+		this.btnCancel.textContent = 'Cancel';
+		this.btnCancel.addEventListener('click', removeForm);
+		this.btnWrapper.appendChild(this.btnCancel);
+
+		this.form.appendChild(this.btnWrapper);
+	}
+}
+
+export const quotes = [
 	"Be so good no one can ignore you",
 	"Remove doubts with actions",
 ];
 
-let tasks = [
+export let tasks = [
 	{
 		"title": "Practice Chinese",
 		"description": "Practice writing Chinese characters for 30 minutes.",
@@ -250,7 +322,7 @@ let tasks = [
 	},
 ];
 
-let defaultFolders = [
+export let defaultFolders = [
 	{
 		"title": "My day",
 		"iconClass": "gg-media-live",
@@ -268,7 +340,7 @@ let defaultFolders = [
 	},
 ]
 
-let userFolders = [	
+export let userFolders = [	
 	{
 		"title": "Personal",
 		"iconClass": "",
@@ -316,4 +388,4 @@ let userFolders = [
 	},
 ];
 
-export { Sidebar, ListForm, Task, MyDayHeader, MyDayStatus, defaultFolders, userFolders, tasks, quotes, settingIcon };
+export { settingIcon };

@@ -100,7 +100,7 @@ body {
 	color: #FF474C;
 }
 
-.priority-1 {
+.priority-3 {
 	color: #B2FFFF;
 }
 
@@ -108,7 +108,7 @@ body {
 	color: #1877F2;
 }
 
-.priority-3{
+.priority-1 {
 	color: #00BFFF;
 }
 
@@ -235,21 +235,34 @@ form {
 	z-index: 3;
 }
 
-#list-form input {
+form > div {
+	width: min(80%, 400px);
+}
+
+
+form input {
 	border: 2px solid white;
 	border-radius: 16px;
 	padding-left: 12px;
-	width: min(70%, 350px);
-	height: 2rem;
-	color: white;
+	width: min(50%, 200px);
+	height: 1.5rem;
 }
 
-#list-form .btn-wrapper {
+.field-wrapper {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0.5rem;
+	gap: 1rem;
+}
+
+.btn-wrapper {
 	display: flex;
 	gap: 2rem;
+	justify-content: center;
 }
 
-#list-form button {
+form button {
 	padding: 8px 32px;
 	background-color: var(--designColor);
 	font-weight: 600;
@@ -262,6 +275,7 @@ form #cancel-btn {
 	background-color: red;
 }
 
+#task-form button:hover,
 #list-form button:hover {
 	background-color: white;
 	color: var(--designColor);
