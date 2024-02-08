@@ -348,6 +348,10 @@ export const quotes = [
 	"Remove doubts with actions",
 	"Run your day or your day will run you",
 	"What’s your plan for today?",
+	"This is your private space",
+	"What will you accomplish today?",
+	"Let's make an impact",
+	"You can make magic happen",
 ];
 
 export let tasks = [
