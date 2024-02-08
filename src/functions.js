@@ -183,8 +183,9 @@ export function getListTasks(list) {
 
 function removeUserList(e) {
 	const target = e.currentTarget.parentElement.querySelector('.folder-title').textContent;
-
-	for(let i = 0; i < userFolders.length; i++)
+	
+	let i;
+	for(i = 0; i < userFolders.length; i++)
 	{
 		if (userFolders[i].title == target)
 		{
@@ -193,6 +194,19 @@ function removeUserList(e) {
 			break;
 		}
 	}
+
+	// Removes all the tasks associated with the list
+	for (i = 0; i < tasks.length; i++)
+	{
+		if (tasks[i].checklist == target)
+		{
+			tasks.splice(i, 1);
+			i--;
+		}
+	}
+	refreshPage();
+	document.querySelector('.sidebar').remove();
+	displaySidebar();
 }
 
 function populateUserList() {
