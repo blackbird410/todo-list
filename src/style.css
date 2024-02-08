@@ -335,6 +335,10 @@ form #cancel-btn:hover {
 		width: 70%;
 	}
 
+	form {
+		background-color: var(--bgColor);
+	}
+
 	#content {
 		padding: 1rem;
 	}
