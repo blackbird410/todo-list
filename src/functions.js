@@ -1,4 +1,4 @@
-import { Sidebar, ListForm, TaskForm, Task, TaskInput, DailyTasks, MyDayHeader, MyDayStatus, 
+import { Sidebar, ListForm, TaskForm, Task, TaskInput, DailyTasks, ListTasks, MyDayHeader, MyDayStatus, 
     defaultFolders, userFolders, tasks, quotes, settingIcon } from "./data.js";
 
 const DATE_STRING_BOUND = 24;
@@ -97,7 +97,7 @@ function getWeekTasks() {
 		currentDate = currentDate.toString().slice(0, DATE_STRING_BOUND);
 		weekTasks.push(
 		{
-			"day": getDay(currentDate),
+			"title": getDay(currentDate),
 			"tasks": getMyDayTasks(currentDate),
 		});
 	}
@@ -128,6 +128,43 @@ export function displayMyTasks() {
 	
 	document.body.appendChild(content);
 }
+
+export function displayListTasks(e) {
+	const target = e.currentTarget.parentElement.querySelector('.folder-title').textContent;
+
+	if (target != "My day" && target != "Next 7 days" && target != "All my tasks")
+	{
+		const previousContent = document.querySelector("#content");
+		if (previousContent != null)
+			previousContent.remove();
+
+		const content = document.createElement('div');
+		content.id = "content";
+		
+		let listTasks = getListTasks(target);
+		listTasks = {
+			"title": target,
+			"tasks": listTasks,
+		};
+		const checkList = new ListTasks(listTasks);
+		content.appendChild(checkList.wrapper);
+
+		document.body.appendChild(content);
+		addTaskbarListener();
+	}
+}
+
+function getListTasks(list) {
+	let listTasks = [];
+
+	tasks.forEach(task => {
+		if (task.checklist == list)
+			listTasks.push(new Task(task));
+	});
+
+	return listTasks;
+}
+
 
 function removeUserList(e) {
 	const target = e.currentTarget.parentElement.querySelector('.folder-title').textContent;

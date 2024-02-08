@@ -1,6 +1,6 @@
 import settingIcon from './setting.png';
 import { removeUserList, addFolder, addTask, removeForm, displayMyDay, displayMyWeek, 
-			displayMyTasks, displayListForm, displayTaskForm, getMyDayTasks, setTaskComplete, today, getDay, inputDay, weekTasksCount } from './functions.js';
+			displayMyTasks, displayListTasks, displayListForm, displayTaskForm, getMyDayTasks, setTaskComplete, today, getDay, inputDay, weekTasksCount } from './functions.js';
 
 const MIN_PRIORITY = 1;
 const MAX_PRIORITY = 3;
@@ -15,12 +15,14 @@ export class SidebarFolder {
 			this.icon.classList.add(folder.iconClass);
 		else
 			this.icon.classList.add('gg-user-list');
-
+		
+		this.icon.addEventListener('click', displayListTasks);
 		this.wrapper.appendChild(this.icon);
 
 		this.title = document.createElement('div');
 		this.title.classList.add('folder-title');
 		this.title.textContent = folder.title;
+		this.title.addEventListener('click', displayListTasks);
 		this.wrapper.appendChild(this.title);
 
 		this.count = document.createElement('div');
@@ -290,19 +292,28 @@ export class TaskForm {
 
 export class DailyTasks {
 	constructor(myTasks) {
+		this.allTasks = myTasks;
 		this.wrapper = document.createElement('div');
 		this.wrapper.classList.add('daily-task-wrapper');
 		
-		this.dayTitle = document.createElement('div');
-		this.dayTitle.classList.add('day-title');
-		this.dayTitle.textContent = myTasks.day;
-		this.wrapper.appendChild(this.dayTitle);
+		this.title = document.createElement('div');
+		this.title.classList.add('day-title');
+		this.title.textContent = myTasks.title;
+		this.wrapper.appendChild(this.title);
 
-		myTasks.tasks.forEach(task => {
+		this.allTasks.tasks.forEach(task => {
 			this.wrapper.appendChild(task.wrapper);
 		});
 
 		this.wrapper.appendChild(new TaskInput().wrapper);
+	}
+}
+
+export class ListTasks extends DailyTasks {
+	constructor(myTasks) {
+		super(myTasks);
+			this.wrapper.classList.add('list-task-wrapper');
+			this.title.classList.add('list-title');
 	}
 }
 
@@ -338,7 +349,7 @@ export let tasks = [
 		"dueDate": "Thu Feb 08 2024 23:43:09",
 		"priority": "1",
 		"notes": "Chapter 5",
-		"checklist": "",
+		"checklist": "Work",
 	},
 	{
 		"title": "Cook dinner",
@@ -346,7 +357,7 @@ export let tasks = [
 		"dueDate": "Fri Feb 09 2024 16:00:00",
 		"priority": "2",
 		"notes": "Use mushrooms, green pepper and onions",
-		"checklist": "",
+		"checklist": "Personal",
 	},
 	{
 		"title": "Exercise",
@@ -354,7 +365,7 @@ export let tasks = [
 		"dueDate": "Sat Feb 10 2024 18:00:00",
 		"priority": "3",
 		"notes": "Go hard, go fast and be strong.",
-		"checklist": "",
+		"checklist": "Personal",
 	},
 	{
 		"title": "Buy fruits",
@@ -362,7 +373,7 @@ export let tasks = [
 		"dueDate": "Sun Feb 11 2024 08:00:00",
 		"priority": "2",
 		"notes": "Eat at least one fruit per day and you won't have to visit the med before a long time.",
-		"checklist": "",
+		"checklist": "Grocery list",
 	},
 ];
 
