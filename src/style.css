@@ -31,6 +31,7 @@ body {
 	grid-template-rows: 2fr 2fr 300px 1fr;
 	align-items: start;
 	gap: 1rem;
+	padding: 1rem;
 }
 
 .my-day-header {
@@ -315,9 +316,12 @@ form #cancel-btn:hover {
 	gap: 1rem;
 }
 
+.all-tasks-wrapper,
 .list-task-wrapper {
 	align-self: center;
 	min-width: fit-content;
+	overflow-y: scroll;
+	max-height: 90vh;
 }
 
 .day-title {

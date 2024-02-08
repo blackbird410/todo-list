@@ -317,6 +317,14 @@ export class ListTasks extends DailyTasks {
 	}
 }
 
+export class AllTasks extends DailyTasks {
+	constructor(myTasks) {
+		super(myTasks);
+		this.wrapper.classList.add('all-tasks-wrapper');
+		this.title.textContent = "My Tasks";
+	}
+}
+
 export class TaskInput {
 	constructor() {
 		this.wrapper = document.createElement('div');

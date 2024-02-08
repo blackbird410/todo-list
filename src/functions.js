@@ -1,5 +1,7 @@
-import { Sidebar, ListForm, TaskForm, Task, TaskInput, DailyTasks, ListTasks, MyDayHeader, MyDayStatus, 
-    defaultFolders, userFolders, tasks, quotes, settingIcon } from "./data.js";
+import { Sidebar, ListForm, TaskForm, Task, 
+		TaskInput, DailyTasks, ListTasks, AllTasks, 
+		MyDayHeader, MyDayStatus, defaultFolders, 
+		userFolders, tasks, quotes, settingIcon } from "./data.js";
 
 const DATE_STRING_BOUND = 24;
 
@@ -126,8 +128,19 @@ export function displayMyTasks() {
 
 	const content = document.createElement('div');
 	content.id = "content";
-	
+
+	let allTasks = [];
+	tasks.forEach(task => {
+		allTasks.push(new Task(task));
+	});
+	allTasks = new AllTasks(
+		{
+			"title" : "My tasks",
+			"tasks": allTasks,
+		});
+	content.appendChild(allTasks.wrapper);
 	document.body.appendChild(content);
+	addTaskbarListener();
 }
 
 export function displayListTasks(e) {
@@ -234,9 +247,10 @@ export function addTask(e) {
 function refreshPage() {
 	if (document.querySelector('.my-week'))
 		displayMyWeek();
-	else if (document.querySelector('.list-task-wrapper')) {
-		
-	}
+	else if (document.querySelector('.list-task-wrapper'))
+		displayListTasks();
+	else if (document.querySelector('.all-tasks-wrapper'))
+		displayMyTasks();
 	else 
 		displayMyDay();
 }
