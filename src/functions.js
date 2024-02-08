@@ -5,6 +5,7 @@ const DATE_STRING_BOUND = 24;
 
 export function displayMain()
 {
+	populateUserList();
 	const mainIcon = document.createElement('img');
 	mainIcon.src = settingIcon;
 	mainIcon.id = 'setting-icon';
@@ -154,7 +155,7 @@ export function displayListTasks(e) {
 	}
 }
 
-function getListTasks(list) {
+export function getListTasks(list) {
 	let listTasks = [];
 
 	tasks.forEach(task => {
@@ -180,6 +181,31 @@ function removeUserList(e) {
 	}
 }
 
+function populateUserList() {
+	let list = [];
+	let found;
+	tasks.forEach(task => {
+		found = false;
+		for (let e in list) 
+		{
+			if (list[e] == task.checklist) 
+			{
+				found = true;
+				break;
+			}
+		}
+
+		if (!found) {
+			list.push(task.checklist);
+			userFolders.push(
+			{
+				"title": task.checklist,
+				"iconClass": "",
+			});
+		}
+	})
+}
+
 export function addTask(e) {
 	e.preventDefault();
 	const title = document.querySelector('form #title').value;
@@ -196,7 +222,7 @@ export function addTask(e) {
 				"dueDate": date,
 				"priority": document.querySelector("form #priority").value,
 				"notes": document.querySelector("form #notes").value,
-				"checklist": "",
+				"checklist": document.querySelector("form #checklist").value,
 			}
 		);
 		refreshPage();

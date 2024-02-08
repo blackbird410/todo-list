@@ -1,6 +1,6 @@
 import settingIcon from './setting.png';
 import { removeUserList, addFolder, addTask, removeForm, displayMyDay, displayMyWeek, 
-			displayMyTasks, displayListTasks, displayListForm, displayTaskForm, getMyDayTasks, setTaskComplete, today, getDay, inputDay, weekTasksCount } from './functions.js';
+			displayMyTasks, displayListTasks, displayListForm, displayTaskForm, getMyDayTasks, setTaskComplete, today, getDay, inputDay, weekTasksCount, getListTasks} from './functions.js';
 
 const MIN_PRIORITY = 1;
 const MAX_PRIORITY = 3;
@@ -40,7 +40,7 @@ export class SidebarFolder {
 				this.count.textContent = tasks.length;
 				break;
 			default:
-				this.count.textContent = folder.files;
+				this.count.textContent = getListTasks(folder.title).length;
 				break;
 		}
 		this.wrapper.appendChild(this.count);
@@ -227,7 +227,7 @@ export class TaskForm {
 		this.form.id = 'task-form';
 		this.form.noValidate = true;
 
-		const fields = ['Title', 'Description', 'DueDate', 'Priority', 'Notes',];
+		const fields = ['Title', 'Description', 'DueDate', 'Priority', 'Notes', 'Checklist'];
 
 		fields.forEach(field => {
 			const wrapper = document.createElement('div');
@@ -381,66 +381,17 @@ export let defaultFolders = [
 	{
 		"title": "My day",
 		"iconClass": "gg-media-live",
-		"files": "5",
 	},
 	{
 		"title": "Next 7 days",
 		"iconClass": "gg-calendar-due",
-		"files": "3",
 	},
 	{
 		"title": "All my tasks",
 		"iconClass": "gg-list",
-		"files": "4",
 	},
 ]
 
-export let userFolders = [	
-	{
-		"title": "Personal",
-		"iconClass": "",
-		"files": "3",
-	},
-	{
-		"title": "Work",
-		"iconClass": "",
-		"files": "2",
-	},
-	{
-		"title": "Grocery List",
-		"iconClass": "",
-		"files": "1",
-	},
-	{
-		"title": "Personal",
-		"iconClass": "",
-		"files": "3",
-	},
-	{
-		"title": "Work",
-		"iconClass": "",
-		"files": "2",
-	},
-	{
-		"title": "Grocery List",
-		"iconClass": "",
-		"files": "1",
-	},
-	{
-		"title": "Personal",
-		"iconClass": "",
-		"files": "3",
-	},
-	{
-		"title": "Work",
-		"iconClass": "",
-		"files": "2",
-	},
-	{
-		"title": "Grocery List",
-		"iconClass": "",
-		"files": "1",
-	},
-];
+export let userFolders = [];
 
 export { settingIcon };
