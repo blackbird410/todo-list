@@ -27,6 +27,7 @@ export class SidebarFolder {
 
 		this.count = document.createElement('div');
 		this.count.classList.add('file-count');
+		this.count.addEventListener('click', displayListTasks);
 
 		switch(folder.title)
 		{
