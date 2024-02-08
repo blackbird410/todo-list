@@ -131,7 +131,8 @@ export function displayMyTasks() {
 }
 
 export function displayListTasks(e) {
-	const target = e.currentTarget.parentElement.querySelector('.folder-title').textContent;
+	let target = e.currentTarget.parentElement.querySelector('.folder-title');
+	target = (target != null) ? target.textContent : document.querySelector('.list-title').textContent;
 
 	if (target != "My day" && target != "Next 7 days" && target != "All my tasks")
 	{
@@ -233,6 +234,9 @@ export function addTask(e) {
 function refreshPage() {
 	if (document.querySelector('.my-week'))
 		displayMyWeek();
+	else if (document.querySelector('.list-task-wrapper')) {
+		
+	}
 	else 
 		displayMyDay();
 }
@@ -441,8 +445,8 @@ function setTaskComplete(e) {
 
 	const targetTask = target.querySelector('.task-title').textContent;
 	removeTask(targetTask);
-	document.querySelector('.my-day-status-msg').textContent = getDayStatus();
 	target.remove();
+	refreshPage();
 }
 
 function today() {

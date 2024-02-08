@@ -124,7 +124,7 @@ body {
 }
 
 .input-wrapper {
-	width: max(80%, 350px);
+	min-width: clamp(50px, 50%, 300px);
 	display: grid;
 	grid-template-rows: 35px;
 	grid-template-columns: 20px 1fr;
@@ -251,7 +251,6 @@ form input {
 	border: 2px solid white;
 	border-radius: 16px;
 	padding-left: 12px;
-	width: min(50%, 200px);
 	height: 1.5rem;
 }
 
@@ -314,6 +313,11 @@ form #cancel-btn:hover {
 	align-items: stretch;
 	padding: 1rem;
 	gap: 1rem;
+}
+
+.list-task-wrapper {
+	align-self: center;
+	min-width: fit-content;
 }
 
 .day-title {
