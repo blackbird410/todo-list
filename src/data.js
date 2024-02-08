@@ -295,18 +295,18 @@ export class DailyTasks {
 	constructor(myTasks) {
 		this.allTasks = myTasks;
 		this.wrapper = document.createElement('div');
-		this.wrapper.classList.add('daily-task-wrapper');
+		this.wrapper.classList.add('daily-task-wrapper', 'tasks-wrapper');
 		
 		this.title = document.createElement('div');
 		this.title.classList.add('day-title');
 		this.title.textContent = myTasks.title;
 		this.wrapper.appendChild(this.title);
+		this.wrapper.appendChild(new TaskInput().wrapper);
 
 		this.allTasks.tasks.forEach(task => {
 			this.wrapper.appendChild(task.wrapper);
 		});
 
-		this.wrapper.appendChild(new TaskInput().wrapper);
 	}
 }
 
