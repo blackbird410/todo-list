@@ -255,6 +255,7 @@ function removeUserList(e) {
 		if (userFolders[i].title == target)
 		{
 			userFolders.splice(i, 1);
+			i--;
 			e.currentTarget.parentElement.remove();
 			break;
 		}
@@ -272,23 +273,23 @@ function removeUserList(e) {
 	}
 	
 	setData("userFolders", userFolders);
-	setData("tasks", "tasks");
+	setData("tasks", tasks);
 	refreshPage();
 	document.querySelector('.sidebar').remove();
 	displaySidebar();
 }
 
 function populateUserList() {
-	let list = [];
 	let found;
 	let tasks = getData("tasks");
 	let userFolders = getData("userFolders");
+	let i;
 
 	tasks.forEach(task => {
 		found = false;
-		for (let e in list) 
+		for (i = 0; i < userFolders.length; i++)
 		{
-			if (list[e] == task.checklist) 
+			if (userFolders[i].title == task.checklist)
 			{
 				found = true;
 				break;
@@ -296,7 +297,6 @@ function populateUserList() {
 		}
 
 		if (!found && task.checklist != "") {
-			list.push(task.checklist);
 			userFolders.push(
 			{
 				"title": task.checklist,
@@ -391,7 +391,7 @@ function displayListForm() {
 function displaySidebar() {
 	if (document.querySelector('.sidebar') == null)
 	{
-		console.log(getData("userFolders"))
+		populateUserList();
 		const sidebar = new Sidebar(defaultFolders, getData("userFolders"));
 		document.body.appendChild(sidebar.wrapper);
 	}
