@@ -374,6 +374,4 @@ export let defaultFolders = [
 	},
 ];
 
-export let userFolders = [];
-
 export { settingIcon };

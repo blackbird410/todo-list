@@ -4,15 +4,12 @@ import { Sidebar, ListForm, TaskForm, Task,
 		userFolders, quotes, settingIcon } from "./data.js";
 
 const DATE_STRING_BOUND = 24;
-let tasks;
 
 if (!localStorage.getItem("tasks"))
 	populateStorage();
-else
-	loadData();
 
 export function countTasks() {
-	return tasks.length;
+	return getData("tasks").length;
 }
 
 function populateStorage() {
@@ -20,23 +17,25 @@ function populateStorage() {
 	const myTasks = JSON.stringify([]);
 	localStorage.setItem("tasks", myTasks);
 
-	loadData();
+	const userFolders = JSON.stringify([]);
+	localStorage.setItem("userFolders", userFolders);
 }
 
-function loadData() {
-	const stringifyArray = localStorage.getItem("tasks");
+function getData(name) {
+	const stringifyArray = localStorage.getItem(name);
 	const backToArray = JSON.parse(stringifyArray);
-	tasks = backToArray;
+	
+	return backToArray;
+}
+
+function setData(name, data) {
+	const data_serialized = JSON.stringify(data);
+	localStorage.setItem(name, data_serialized);
 }
 
 
 export function displayTaskNote(e) {
-	// Get the title of the task
-	// Find the corresponding task in the array
-	// Take the description and note elements
-	// Add them in the container of the task
-	// Add a trick to toggle display of those two elements
-
+	let tasks = getData("tasks");
 	if (e.currentTarget.querySelector('.task-note') == null)
 	{
 		let i;
@@ -137,10 +136,6 @@ export function displayMyWeek()
 	const content = document.createElement('div');
 	content.id = "content";
 
-	// Here we will add objects to the container for the 7 next days
-	// Each Container should have the task for the specified day
-	// We start appending from today
-	// So get the tasks of each day
 	const weekTasks = getWeekTasks();
 	let i = 1;
 	weekTasks.forEach(day => {
@@ -177,6 +172,7 @@ function getWeekTasks() {
 
 export function weekTasksCount() {
 	let endDate = new Date();
+	let tasks = getData("tasks");
 	endDate.setDate(endDate.getDate() + 6);
 
 	let count = 0;
@@ -197,6 +193,7 @@ export function displayMyTasks() {
 	content.id = "content";
 
 	let allTasks = [];
+	let tasks = getData("tasks");
 	tasks.forEach(task => {
 		allTasks.push(new Task(task));
 	});
@@ -237,6 +234,7 @@ export function displayListTasks(e) {
 
 export function getListTasks(list) {
 	let listTasks = [];
+	let tasks = getData("tasks");
 
 	tasks.forEach(task => {
 		if (task.checklist == list)
@@ -250,6 +248,7 @@ export function getListTasks(list) {
 function removeUserList(e) {
 	const target = e.currentTarget.parentElement.querySelector('.folder-title').textContent;
 	
+	let userFolders = getData("userFolders");
 	let i;
 	for(i = 0; i < userFolders.length; i++)
 	{
@@ -261,6 +260,7 @@ function removeUserList(e) {
 		}
 	}
 
+	let tasks = getData("tasks");
 	// Removes all the tasks associated with the list
 	for (i = 0; i < tasks.length; i++)
 	{
@@ -270,6 +270,9 @@ function removeUserList(e) {
 			i--;
 		}
 	}
+	
+	setData("userFolders", userFolders);
+	setData("tasks", "tasks");
 	refreshPage();
 	document.querySelector('.sidebar').remove();
 	displaySidebar();
@@ -278,6 +281,9 @@ function removeUserList(e) {
 function populateUserList() {
 	let list = [];
 	let found;
+	let tasks = getData("tasks");
+	let userFolders = getData("userFolders");
+
 	tasks.forEach(task => {
 		found = false;
 		for (let e in list) 
@@ -289,7 +295,7 @@ function populateUserList() {
 			}
 		}
 
-		if (!found) {
+		if (!found && task.checklist != "") {
 			list.push(task.checklist);
 			userFolders.push(
 			{
@@ -297,7 +303,10 @@ function populateUserList() {
 				"iconClass": "",
 			});
 		}
-	})
+	});
+
+	setData("userFolders", userFolders);
+
 }
 
 export function addTask(e) {
@@ -306,6 +315,8 @@ export function addTask(e) {
 	let date = document.querySelector("form #duedate").value; 
 	let time = document.querySelector("form #duetime").value;
 	date = new Date(date + ' ' + time).toString().slice(0, 24);
+
+	let tasks = getData("tasks");
 
 	if (title != '')
 	{
@@ -319,6 +330,7 @@ export function addTask(e) {
 				"checklist": document.querySelector("form #checklist").value,
 			}
 		);
+		setData("tasks", tasks);
 		refreshPage();
 		removeForm();
 	}
@@ -335,7 +347,18 @@ function refreshPage() {
 
 function addFolder() {
 	const folderName = document.querySelector('#list-name').value;
-	if (folderName != '')
+	// Check if not already added 
+	let userFolders = getData("userFolders");
+	let found = false;
+	for (let i = 0; i < userFolders.length; i++) {
+		if (userFolders[i].title == folderName)
+		{
+			found = true;
+			break;
+		}
+	}
+
+	if (folderName != '' && !found)
 	{
 		userFolders.push(
 			{
@@ -343,6 +366,7 @@ function addFolder() {
 				"iconClass": "",
 			}
 		);
+		setData("userFolders", userFolders);
 
 		document.querySelector('.sidebar').remove();
 		displaySidebar();
@@ -367,7 +391,8 @@ function displayListForm() {
 function displaySidebar() {
 	if (document.querySelector('.sidebar') == null)
 	{
-		const sidebar = new Sidebar(defaultFolders, userFolders);
+		console.log(getData("userFolders"))
+		const sidebar = new Sidebar(defaultFolders, getData("userFolders"));
 		document.body.appendChild(sidebar.wrapper);
 	}
 }
@@ -450,6 +475,7 @@ function getDayStatus() {
 
 function getMyDayTasks(date) {
 	let myDayTasks = [];
+	let tasks = getData("tasks");
 
 	tasks.forEach(task => {
 		if (new Date(task.dueDate).toLocaleDateString() == new Date(date).toLocaleDateString())
@@ -513,12 +539,8 @@ function getPeriodOfTheDay() {
 		return "night";
 }
 
-
-function getUsername() {
-	return "Neil";
-};
-
 function removeTask(taskTitle) {
+	let tasks = getData("tasks");
 	for (let i = 0; i < tasks.length; i++)
 	{
 		if (tasks[i].title == taskTitle)
@@ -527,6 +549,8 @@ function removeTask(taskTitle) {
 			break;
 		}
 	}
+
+	setData("tasks", tasks);
 }
 
 function setTaskComplete(e) {
