@@ -25,7 +25,7 @@ function getData(name) {
 	const stringifyArray = localStorage.getItem(name);
 	const backToArray = JSON.parse(stringifyArray);
 	
-	return backToArray;
+	return (Array.isArray(backToArray)) ? backToArray : [];
 }
 
 function setData(name, data) {
