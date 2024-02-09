@@ -1,9 +1,34 @@
 import { Sidebar, ListForm, TaskForm, Task, 
 		TaskInput, DailyTasks, ListTasks, AllTasks, 
 		MyDayHeader, MyDayStatus, defaultFolders, 
-		userFolders, tasks, quotes, settingIcon } from "./data.js";
+		userFolders, quotes, settingIcon } from "./data.js";
 
 const DATE_STRING_BOUND = 24;
+let tasks;
+
+if (!localStorage.getItem("tasks"))
+	populateStorage();
+else
+	loadData();
+
+export function countTasks() {
+	return tasks.length;
+}
+
+function populateStorage() {
+	
+	const myTasks = JSON.stringify([]);
+	localStorage.setItem("tasks", myTasks);
+
+	loadData();
+}
+
+function loadData() {
+	const stringifyArray = localStorage.getItem("tasks");
+	const backToArray = JSON.parse(stringifyArray);
+	tasks = backToArray;
+}
+
 
 export function displayTaskNote(e) {
 	// Get the title of the task
