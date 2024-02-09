@@ -5,6 +5,48 @@ import { Sidebar, ListForm, TaskForm, Task,
 
 const DATE_STRING_BOUND = 24;
 
+export function displayTaskNote(e) {
+	// Get the title of the task
+	// Find the corresponding task in the array
+	// Take the description and note elements
+	// Add them in the container of the task
+	// Add a trick to toggle display of those two elements
+
+	if (e.currentTarget.querySelector('.task-note') == null)
+	{
+		let i;
+		let targetTitle = e.currentTarget.querySelector('.task-title').textContent;
+		for (i = 0; i < tasks.length; i++)
+		{
+			if (tasks[i].title == targetTitle)
+			{
+				const desc = document.createElement('div');
+				desc.classList.add('task-description');
+				desc.textContent = tasks[i].description;
+
+				const note = document.createElement('div');
+				note.classList.add('task-note');
+				note.textContent = tasks[i].notes;
+
+				e.currentTarget.appendChild(desc);
+				e.currentTarget.appendChild(note);
+				break;
+			}
+		}
+
+	}
+	else {
+		e.currentTarget.querySelector('.task-description').remove();
+		e.currentTarget.querySelector('.task-note').remove();
+	}
+}
+
+
+export function getChecklistTitle() {
+	let element = document.querySelector('.list-title');
+	return (element != null) ? element.textContent : "";
+}
+
 export function displayMain()
 {
 	populateUserList();
@@ -144,8 +186,7 @@ export function displayMyTasks() {
 }
 
 export function displayListTasks(e) {
-	let target = e.currentTarget.parentElement.querySelector('.folder-title');
-	target = (target != null) ? target.textContent : document.querySelector('.list-title').textContent;
+	let target = e.currentTarget.parentElement.querySelector('.folder-title').textContent;
 
 	if (target != "My day" && target != "Next 7 days" && target != "All my tasks")
 	{
@@ -261,8 +302,6 @@ export function addTask(e) {
 function refreshPage() {
 	if (document.querySelector('.my-week'))
 		displayMyWeek();
-	else if (document.querySelector('.list-task-wrapper'))
-		displayListTasks();
 	else if (document.querySelector('.all-tasks-wrapper'))
 		displayMyTasks();
 	else 
@@ -270,7 +309,6 @@ function refreshPage() {
 }
 
 function addFolder() {
-	e.preventDefault();
 	const folderName = document.querySelector('#list-name').value;
 	if (folderName != '')
 	{
@@ -278,7 +316,6 @@ function addFolder() {
 			{
 				"title": folderName,
 				"iconClass": "",
-				"files": "0",
 			}
 		);
 

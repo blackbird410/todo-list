@@ -1,6 +1,9 @@
 import settingIcon from './setting.png';
-import { removeUserList, addFolder, addTask, removeForm, displayMyDay, displayMyWeek, 
-			displayMyTasks, displayListTasks, displayListForm, displayTaskForm, getMyDayTasks, setTaskComplete, today, getDay, inputDay, weekTasksCount, getListTasks} from './functions.js';
+import { removeUserList, addFolder, addTask, removeForm, displayMyDay, displayMyWeek,
+			displayMyTasks, displayListTasks, displayListForm, displayTaskForm, 
+			getMyDayTasks, setTaskComplete, today, getDay, inputDay, weekTasksCount, 
+			getListTasks, getChecklistTitle, displayTaskNote } from './functions.js';
+
 
 const MIN_PRIORITY = 1;
 const MAX_PRIORITY = 3;
@@ -174,20 +177,15 @@ export class Task {
 		this.title.textContent = task.title;
 		this.wrapper.appendChild(this.title);
 
-		this.description = document.createElement('div');
-		this.description.classList.add('task-description');
-		this.description.textContent = task.description;
-		this.wrapper.appendChild(this.description);
-
 		this.dueDate = document.createElement('div');
 		this.dueDate.classList.add('task-due-date');
 		this.dueDate.textContent = task.dueDate;
 		this.wrapper.appendChild(this.dueDate);
 
-		this.notes = document.createElement('div');
-		this.notes.classList.add('task-note');
-		this.notes.textContent = task.notes;
-		this.wrapper.appendChild(this.notes);	
+		this.wrapper.addEventListener('click', displayTaskNote);
+
+		// Should add an event when clicking on the element to display those information
+
 	}
 }
 
@@ -264,6 +262,10 @@ export class TaskForm {
 					input.min = MIN_PRIORITY;
 					input.max = MAX_PRIORITY;
 					input.value = MIN_PRIORITY;
+					wrapper.appendChild(input);
+					break;
+				case "Checklist":
+					input.value = getChecklistTitle();
 				default:
 					wrapper.appendChild(input);
 					break;
