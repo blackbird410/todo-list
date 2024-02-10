@@ -1,8 +1,26 @@
 import settingIcon from './setting.png';
-import { removeUserList, addFolder, addTask, removeForm, displayMyDay, displayMyWeek,
-			displayMyTasks, displayListTasks, displayListForm, displayTaskForm, 
-			getMyDayTasks, setTaskComplete, today, getDay, inputDay, weekTasksCount, 
-			getListTasks, getChecklistTitle, displayTaskNote, countTasks } from './functions.js';
+import { 
+	removeUserList, 
+	addFolder, 
+	addTask, 
+	removeForm, 
+	displayMyDay, 
+	displayMyWeek,
+	displayMyTasks, 
+	displayListTasks, 
+	displayListForm, 
+	displayTaskForm, 
+	getMyDayTasks, 
+	setTaskComplete, 
+	today, 
+	getDay, 
+	inputDay, 
+	weekTasksCount, 
+	getListTasks, 
+	getChecklistTitle, 
+	displayTaskNote, 
+	countTasks 
+	} from './functions';
 
 
 const MIN_PRIORITY = 1;
@@ -48,7 +66,6 @@ export class SidebarFolder {
 				break;
 		}
 		this.wrapper.appendChild(this.count);
-	
 	}
 }
 
@@ -59,6 +76,7 @@ export class Sidebar {
 
 		this.defaultWrapper = document.createElement('div');
 		this.defaultWrapper.classList.add('default-wrapper');
+
 		defaultFolders.forEach(folder => {
 			const f = new SidebarFolder(folder);
 
@@ -77,6 +95,7 @@ export class Sidebar {
 
 			this.defaultWrapper.appendChild(f.wrapper);
 		});
+
 		this.wrapper.appendChild(this.defaultWrapper);
 
 		this.userList = document.createElement('div');
@@ -97,13 +116,14 @@ export class Sidebar {
 		this.wrapper.appendChild(this.titleWrapper);
 		userFolders.forEach(folder => {
 			const f = new SidebarFolder(folder);
-
 			const removeIcon = document.createElement('i');
+
 			removeIcon.classList.add('gg-remove');
 			removeIcon.addEventListener('click', removeUserList);
 			f.wrapper.appendChild(removeIcon);
 			this.userList.appendChild(f.wrapper);
 		});
+
 		this.wrapper.appendChild(this.userList);
 	}
 }
@@ -183,9 +203,6 @@ export class Task {
 		this.wrapper.appendChild(this.dueDate);
 
 		this.wrapper.addEventListener('click', displayTaskNote);
-
-		// Should add an event when clicking on the element to display those information
-
 	}
 }
 
@@ -230,21 +247,20 @@ export class TaskForm {
 
 		fields.forEach(field => {
 			const wrapper = document.createElement('div');
-			wrapper.classList.add('field-wrapper');
-
 			const id = field.toLowerCase();
-
 			const label = document.createElement('label');
+			const input = document.createElement('input');
+
+			wrapper.classList.add('field-wrapper');
 			label.setAttribute('for', id);
 			label.textContent = field;
 			wrapper.appendChild(label);
-
-			const input = document.createElement('input');
 			input.id = id;
 			input.name = id;
+
 			switch(field)
 			{
-				case "DueDate":
+				case "DueDate": {
 					input.type = 'date';
 					input.min = today();
 					input.value = inputDay;
@@ -257,13 +273,15 @@ export class TaskForm {
 					time.value= '08:00:00';
 					wrapper.appendChild(time);
 					break;
-				case "Priority":
+				}
+				case "Priority": {
 					input.type = 'number';
 					input.min = MIN_PRIORITY;
 					input.max = MAX_PRIORITY;
 					input.value = MIN_PRIORITY;
 					wrapper.appendChild(input);
 					break;
+				}
 				case "Checklist":
 					input.value = getChecklistTitle();
 				default:
@@ -275,14 +293,16 @@ export class TaskForm {
 
 		
 		this.btnWrapper = document.createElement('div');
-		this.btnWrapper.classList.add('btn-wrapper');
 		this.btnSave = document.createElement('button');
+		this.btnCancel = document.createElement('button');
+		
+		this.btnWrapper.classList.add('btn-wrapper');
+
 		this.btnSave.id = 'add-task-btn';
 		this.btnSave.textContent = 'Save'
 		this.btnSave.addEventListener('click', addTask);
 		this.btnWrapper.appendChild(this.btnSave);
 
-		this.btnCancel = document.createElement('button');
 		this.btnCancel.id = 'cancel-btn';
 		this.btnCancel.name = 'cancel-btn';
 		this.btnCancel.textContent = 'Cancel';
@@ -295,11 +315,12 @@ export class TaskForm {
 
 export class DailyTasks {
 	constructor(myTasks) {
-		this.allTasks = myTasks;
 		this.wrapper = document.createElement('div');
+		this.title = document.createElement('div');
+		
+		this.allTasks = myTasks;
 		this.wrapper.classList.add('daily-task-wrapper', 'tasks-wrapper');
 		
-		this.title = document.createElement('div');
 		this.title.classList.add('day-title');
 		this.title.textContent = myTasks.title;
 		this.wrapper.appendChild(this.title);
@@ -331,14 +352,15 @@ export class AllTasks extends DailyTasks {
 export class TaskInput {
 	constructor() {
 		this.wrapper = document.createElement('div');
+		const icon = document.createElement('i');
+		const input = document.createElement('input');
+
 		this.wrapper.classList.add('input-wrapper');
 		this.wrapper.addEventListener('click', displayTaskForm);
 
-		const icon = document.createElement('i');
 		icon.classList.add('gg-add');
 		this.wrapper.appendChild(icon);
 
-		const input = document.createElement('input');
 		input.classList.add('task-input');
 		input.name = 'task-input';
 		input.placeholder = "Add task";
@@ -375,3 +397,4 @@ export let defaultFolders = [
 ];
 
 export { settingIcon };
+

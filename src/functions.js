@@ -1,45 +1,49 @@
-import { Sidebar, ListForm, TaskForm, Task, 
-		TaskInput, DailyTasks, ListTasks, AllTasks, 
-		MyDayHeader, MyDayStatus, defaultFolders, 
-		userFolders, quotes, settingIcon } from "./data.js";
+import { 
+	Sidebar, 
+	ListForm, 
+	TaskForm, 
+	Task, 
+	TaskInput, 
+	DailyTasks, 
+	ListTasks, 
+	AllTasks, 
+	MyDayHeader, 
+	MyDayStatus, 
+	defaultFolders,
+	quotes, 
+	settingIcon 
+	} from "./data";
 
 const DATE_STRING_BOUND = 24;
 
 if (!localStorage.getItem("tasks"))
 	populateStorage();
 
-export function countTasks() {
-	return getData("tasks").length;
-}
-
-function populateStorage() {
-	
+export const countTasks = () => getData("tasks").length;
+export const populateStorage =  () => {
 	const myTasks = JSON.stringify([]);
 	localStorage.setItem("tasks", myTasks);
 
 	const userFolders = JSON.stringify([]);
 	localStorage.setItem("userFolders", userFolders);
-}
+};
 
-function getData(name) {
-	const stringifyArray = localStorage.getItem(name);
-	const backToArray = JSON.parse(stringifyArray);
-	
+const getData = (name) => {
+	const backToArray = JSON.parse(localStorage.getItem(name));
 	return (Array.isArray(backToArray)) ? backToArray : [];
-}
+};
 
-function setData(name, data) {
-	const data_serialized = JSON.stringify(data);
-	localStorage.setItem(name, data_serialized);
-}
-
+const setData = (name, data) => localStorage.setItem(name, JSON.stringify(data));
 
 export function displayTaskNote(e) {
 	let tasks = getData("tasks");
+
 	if (e.currentTarget.querySelector('.task-note') == null)
 	{
 		let i;
 		let targetTitle = e.currentTarget.querySelector('.task-title').textContent;
+
+		// FIXME: Use JavaScript higher order function to complete this task
 		for (i = 0; i < tasks.length; i++)
 		{
 			if (tasks[i].title == targetTitle)
@@ -57,87 +61,82 @@ export function displayTaskNote(e) {
 				break;
 			}
 		}
-
 	}
 	else {
 		e.currentTarget.querySelector('.task-description').remove();
 		e.currentTarget.querySelector('.task-note').remove();
 	}
-}
+};
 
 
-export function getChecklistTitle() {
+export const getChecklistTitle = () => {
 	let element = document.querySelector('.list-title');
 	return (element != null) ? element.textContent : "";
-}
+};
 
-export function displayMain()
-{
-	populateUserList();
+export const displayMain = () => {
 	const mainIcon = document.createElement('img');
+
+	populateUserList();
 	mainIcon.src = settingIcon;
 	mainIcon.id = 'setting-icon';
 	mainIcon.addEventListener('mouseover', displaySidebar);
 	document.body.appendChild(mainIcon);
-    displayMyDay();
-}
+  displayMyDay();
+};
 
-export function displayMyDay()
-{
+export const displayMyDay = () => {
 	const previousContent = document.querySelector("#content");
+	const content = document.createElement('div');
+	const welcomeMsg = getWelcomeMessage();
+	const quote = getDailyQuote(quotes);
+	const header = new MyDayHeader(welcomeMsg, quote);
+	const date = getDate();
+	const myDayStatus = new MyDayStatus(date, getDayStatus());
+	const tasksWrapper = document.createElement('div');
+	const myDay = new Date().toString().slice(0, 24);
+	const myDayTasks = getMyDayTasks(myDay);
+	const inputWrapper = new TaskInput().wrapper;
+
 	if (previousContent != null)
 		previousContent.remove();
 
-	const content = document.createElement('div');
 	content.id = "content";
-
-	const welcomeMsg = getWelcomeMessage();
-	const quote = getDailyQuote(quotes);
-
-	const header = new MyDayHeader(welcomeMsg, quote);
 	content.appendChild(header.wrapper);
-	
-	const date = getDate();
-	const myDayStatus = new MyDayStatus(date, getDayStatus());
 	content.appendChild(myDayStatus.wrapper);
-
-	const tasksWrapper = document.createElement('div');
 	tasksWrapper.classList.add('tasks-wrapper');
 	
-	const myDay = new Date().toString().slice(0, 24);
-	const myDayTasks = getMyDayTasks(myDay);
 	myDayTasks.forEach(task => {
 		task.dueDate.textContent = new Date(task.dueDate.textContent).toLocaleTimeString();
 		tasksWrapper.appendChild(task.wrapper);
 	});
-	content.appendChild(tasksWrapper);
 
-	const inputWrapper = new TaskInput().wrapper;
+	content.appendChild(tasksWrapper);
 	content.appendChild(inputWrapper);
 	document.body.appendChild(content);
 	addTaskbarListener();
-}
+};
 
-function addTaskbarListener() {
+const addTaskbarListener = () => {
 	const content = document.querySelector("#content");
+
 	content.addEventListener('mouseover', () => {
 		let sidebar = document.querySelector('.sidebar');
 		if (sidebar != null)
 			sidebar.remove();
 	});
-}
+};
 
-export function displayMyWeek()
-{
+export const displayMyWeek = () => {
 	const previousContent = document.querySelector("#content");
-	if (previousContent != null)
-		previousContent.remove();
-
 	const content = document.createElement('div');
-	content.id = "content";
-
 	const weekTasks = getWeekTasks();
 	let i = 1;
+
+	if (previousContent != null)
+		previousContent.remove();
+	content.id = "content";
+
 	weekTasks.forEach(day => {
 		const dailyTasks = new DailyTasks(day);
 		dailyTasks.wrapper.id = `day-${i}`;
@@ -146,17 +145,17 @@ export function displayMyWeek()
 	});
 
 	content.classList.add('grid-row', 'my-week');
-	
 	document.body.appendChild(content);
 	addTaskbarListener();
-}
+};
 
-function getWeekTasks() {
+const getWeekTasks = () => {
 	let currentDate;
 	let weekTasks = [];
+	let d;
 
-	for (let d = 0; d < 7; d++)
-	{
+	// FIXME: Use JavaScript higher function to complete this task
+	for (d = 0; d < 7; d++)	{
 		currentDate = new Date();
 		currentDate.setDate(currentDate.getDate() + d);
 		currentDate = currentDate.toString().slice(0, DATE_STRING_BOUND);
@@ -166,73 +165,71 @@ function getWeekTasks() {
 			"tasks": getMyDayTasks(currentDate),
 		});
 	}
-
 	return weekTasks;
-}
+};
 
-export function weekTasksCount() {
+export const weekTasksCount = () => {
 	let endDate = new Date();
 	let tasks = getData("tasks");
-	endDate.setDate(endDate.getDate() + 6);
-
 	let count = 0;
+
+	endDate.setDate(endDate.getDate() + 6);
 	tasks.forEach(task => {
 		if (new Date(task.dueDate) <  endDate)
 			count++;
 	});
-
 	return count;
-}
+};
 
-export function displayMyTasks() {	
+export const displayMyTasks = () => {	
 	const previousContent = document.querySelector("#content");
+	const content = document.createElement('div');
+	let allTasks = [];
+	let tasks = getData("tasks");
+
 	if (previousContent != null)
 		previousContent.remove();
 
-	const content = document.createElement('div');
 	content.id = "content";
-
-	let allTasks = [];
-	let tasks = getData("tasks");
 	tasks.forEach(task => {
 		allTasks.push(new Task(task));
 	});
+
 	allTasks = new AllTasks(
 		{
 			"title" : "My tasks",
 			"tasks": allTasks,
-		});
+		}
+	);
 	content.appendChild(allTasks.wrapper);
 	document.body.appendChild(content);
 	addTaskbarListener();
-}
+};
 
-export function displayListTasks(e) {
+export const displayListTasks = (e) => {
 	let target = e.currentTarget.parentElement.querySelector('.folder-title').textContent;
 
 	if (target != "My day" && target != "Next 7 days" && target != "All my tasks")
 	{
 		const previousContent = document.querySelector("#content");
+		const content = document.createElement('div');
+		const checkList = new ListTasks(listTasks);
+		let listTasks = getListTasks(target);
+
 		if (previousContent != null)
 			previousContent.remove();
-
-		const content = document.createElement('div');
 		content.id = "content";
-		
-		let listTasks = getListTasks(target);
 		listTasks = {
 			"title": target,
 			"tasks": listTasks,
 		};
-		const checkList = new ListTasks(listTasks);
 		content.appendChild(checkList.wrapper);
-
 		document.body.appendChild(content);
 		addTaskbarListener();
 	}
-}
+};
 
-export function getListTasks(list) {
+export const getListTasks = (list) => {
 	let listTasks = [];
 	let tasks = getData("tasks");
 
@@ -240,16 +237,16 @@ export function getListTasks(list) {
 		if (task.checklist == list)
 			listTasks.push(new Task(task));
 	});
-
 	return listTasks;
-}
+};
 
-
-function removeUserList(e) {
+const removeUserList = (e) => {
 	const target = e.currentTarget.parentElement.querySelector('.folder-title').textContent;
-	
 	let userFolders = getData("userFolders");
+	let tasks = getData("tasks");
 	let i;
+
+	// FIXME: Use JavaScript higher order function to complete this task
 	for(i = 0; i < userFolders.length; i++)
 	{
 		if (userFolders[i].title == target)
@@ -261,8 +258,7 @@ function removeUserList(e) {
 		}
 	}
 
-	let tasks = getData("tasks");
-	// Removes all the tasks associated with the list
+	// FIXME: Use JavaScript higher order function to complete this task
 	for (i = 0; i < tasks.length; i++)
 	{
 		if (tasks[i].checklist == target)
@@ -277,9 +273,9 @@ function removeUserList(e) {
 	refreshPage();
 	document.querySelector('.sidebar').remove();
 	displaySidebar();
-}
+};
 
-function populateUserList() {
+const populateUserList = () => {
 	let found;
 	let tasks = getData("tasks");
 	let userFolders = getData("userFolders");
@@ -306,20 +302,17 @@ function populateUserList() {
 	});
 
 	setData("userFolders", userFolders);
+};
 
-}
-
-export function addTask(e) {
-	e.preventDefault();
+export const addTask = (e) => {
 	const title = document.querySelector('form #title').value;
 	let date = document.querySelector("form #duedate").value; 
 	let time = document.querySelector("form #duetime").value;
-	date = new Date(date + ' ' + time).toString().slice(0, 24);
-
 	let tasks = getData("tasks");
 
-	if (title != '')
-	{
+	date = new Date(date + ' ' + time).toString().slice(0, 24);
+	e.preventDefault();
+	if (title != ''){
 		tasks.push(
 			{
 				"title": title,
@@ -330,36 +323,36 @@ export function addTask(e) {
 				"checklist": document.querySelector("form #checklist").value,
 			}
 		);
+
 		setData("tasks", tasks);
 		refreshPage();
 		removeForm();
 	}
-}
+};
 
-function refreshPage() {
+const refreshPage = () => {
 	if (document.querySelector('.my-week'))
 		displayMyWeek();
 	else if (document.querySelector('.all-tasks-wrapper'))
 		displayMyTasks();
 	else 
 		displayMyDay();
-}
+};
 
-function addFolder() {
+const addFolder = () => {
 	const folderName = document.querySelector('#list-name').value;
-	// Check if not already added 
 	let userFolders = getData("userFolders");
 	let found = false;
+	
+	// FIXME: Use JavaScript higher order function find to reformat this task
 	for (let i = 0; i < userFolders.length; i++) {
-		if (userFolders[i].title == folderName)
-		{
+		if (userFolders[i].title == folderName) {
 			found = true;
 			break;
 		}
 	}
 
-	if (folderName != '' && !found)
-	{
+	if (folderName != '' && !found) {
 		userFolders.push(
 			{
 				"title": folderName,
@@ -367,48 +360,40 @@ function addFolder() {
 			}
 		);
 		setData("userFolders", userFolders);
-
 		document.querySelector('.sidebar').remove();
 		displaySidebar();
 		removeForm();
 	}
-}
+};
 
-function removeForm() {
-	const form = document.querySelector('form');
-	if(form != null)
-		form.remove();
-}
+const removeForm = () => {
+	if(document.querySelector('form') != null) document.querySelector('form').remove();
+};
 
-function displayListForm() {
-	if (document.querySelector('#list-form') == null)
-	{
-		const listForm = new ListForm();
-		document.body.appendChild(listForm.form);
-	}
-}
+const displayListForm = () => {
+	if (document.querySelector('#list-form') == null) document.body.appendChild(new ListForm().form);
+};
 
-function displaySidebar() {
+const displaySidebar = () => {
 	if (document.querySelector('.sidebar') == null)
 	{
 		populateUserList();
 		const sidebar = new Sidebar(defaultFolders, getData("userFolders"));
 		document.body.appendChild(sidebar.wrapper);
 	}
-}
+};
 
-export function displayTaskForm(e) {
-	if (document.querySelector('#task-form') == null)
-	{
+export const displayTaskForm = (e) => {
+	if (document.querySelector('#task-form') == null) {
 		setTheDay(e);
 		const taskForm = new TaskForm();
 		document.body.appendChild(taskForm.form);
 	}
-}
+};
 
-function formatTasks(tasks) {
+const formatTasks = (tasks) => {
+
 	// Tranform the tasks objects into DOM elements
-
 	let taskList = [];
 	tasks.forEach(task => {
 		taskList.push(new Task(task));
@@ -416,10 +401,12 @@ function formatTasks(tasks) {
 	return taskList;
 };
 
-function sortTasks(a) {
+const sortTasks = (a) => {
 	let nTasks = a.length;
-	let i, j;
-
+	let i;
+	let j;
+	
+	// FIXME: Use JavaScript higer order functions to complete this task
 	for (i = 0; i < nTasks; i++)
 	{
 		for(j = i+1; j < nTasks; j++)
@@ -431,8 +418,7 @@ function sortTasks(a) {
 	return a;
 };
 
-function swap(a, b)
-{
+const swap = (a, b) => {
 	let temp = '';
 
 	temp = a.title;
@@ -458,12 +444,11 @@ function swap(a, b)
 	temp = a.checklist;
 	a.checklist = b.checklist;
 	b.checklist = temp;
-}
+};
 
-function getDayStatus() {
+const getDayStatus = () => {
 	const n = getMyDayTasks(new Date()).length;
-	switch(n)
-	{
+	switch(n) {
 		case 0:
 			return "You have no event scheduled for today";
 		case 1:
@@ -471,9 +456,9 @@ function getDayStatus() {
 		default:
 			return `You have ${n} events scheduled for today`;
 	}
-}
+};
 
-function getMyDayTasks(date) {
+const getMyDayTasks = (date) => {
 	let myDayTasks = [];
 	let tasks = getData("tasks");
 
@@ -481,20 +466,20 @@ function getMyDayTasks(date) {
 		if (new Date(task.dueDate).toLocaleDateString() == new Date(date).toLocaleDateString())
 			myDayTasks.push(task);
 	});
-
 	return formatTasks(sortTasks(myDayTasks));
-}
+};
 
-function getDate() {	
+const getDate = () => {	
 	const d = new Date().toDateString().split(' ').splice(0,3);
+
 	return {
 		"day": d[0],
 		"number": Number(d[2]),
 		"month": d[1],
 	};
-}
+};
 
-function getDay(d) {
+const getDay = (d) => {
 	let day = new Date(d).toDateString().split(' ').splice(0,3)[0];
 
 	switch(day) {
@@ -509,26 +494,19 @@ function getDay(d) {
 		default:
 			return day + "day";
 	}
-}
-
-function getDailyQuote(quotes) {
-    const quoteIndex = Math.floor(Math.random() * quotes.length);
-	return quotes[quoteIndex];
-}
-
-function getWelcomeMessage() {
-	return `Good ${getPeriodOfTheDay()}`;
 };
 
+const getDailyQuote = (quotes) => quotes[Math.floor(Math.random() * quotes.length)];
 
-function getPeriodOfTheDay() {
+const getWelcomeMessage = () => `Good ${getPeriodOfTheDay()}`;
+
+const getPeriodOfTheDay = () => {
 	const localeDate = new Date();
 	const localeTime = localeDate.toLocaleTimeString(undefined, {
 		hour: '2-digit',
 		minute: '2-digit',
 		second: '2-digit',
 	});
-
 	let period = localeTime.split(' ')[1] 
 
 	if (period ==  "AM")
@@ -537,10 +515,12 @@ function getPeriodOfTheDay() {
 		return "afternoon";
 	else
 		return "night";
-}
+};
 
-function removeTask(taskTitle) {
+const removeTask = (taskTitle) => {
 	let tasks = getData("tasks");
+	
+	// FIXME: Use JavaScript higher function to complete this task
 	for (let i = 0; i < tasks.length; i++)
 	{
 		if (tasks[i].title == taskTitle)
@@ -553,29 +533,31 @@ function removeTask(taskTitle) {
 	setData("tasks", tasks);
 }
 
-function setTaskComplete(e) {
+const setTaskComplete = (e) => {
 	const target = e.currentTarget.parentElement;
-	target.classList.add('task-completed');
-
 	const targetTask = target.querySelector('.task-title').textContent;
+
+	target.classList.add('task-completed');
 	removeTask(targetTask);
 	target.remove();
 	refreshPage();
 }
 
-function today() {
+const today = () => {
 	let d = new Date().toLocaleDateString().split('/');
-	return `${d[2]}-${(d[0] < 10) ? `0${d[0]}` : d[0]}-${(d[1] < 10) ? `0${d[1]}` : d[1]}`;
 
+	return `${d[2]}-${(d[0] < 10) ? `0${d[0]}` : d[0]}-${(d[1] < 10) ? `0${d[1]}` : d[1]}`;
 }
 
 export let inputDay = "";
-function setTheDay(e) {
+const setTheDay = (e) => {
 	let d = e.currentTarget.parentElement.querySelector('.day-title');
+	
 	if (d != null)
 	{
-		d = Number(e.currentTarget.parentElement.id.split('-')[1]) - 1;
 		let currentDate = new Date();
+		
+		d = Number(e.currentTarget.parentElement.id.split('-')[1]) - 1;
 		currentDate.setDate(currentDate.getDate() + d);
 		d = currentDate.toLocaleDateString().split('/');
 		inputDay = `${d[2]}-${(d[0] < 10) ? `0${d[0]}` : d[0]}-${(d[1] < 10) ? `0${d[1]}` : d[1]}`;
@@ -585,3 +567,4 @@ function setTheDay(e) {
 }
 
 export { removeUserList, addFolder, removeForm, displayListForm, displaySidebar, getMyDayTasks, setTaskComplete, today };
+
