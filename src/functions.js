@@ -12,7 +12,7 @@ import {
 	defaultFolders,
 	quotes, 
 	settingIcon 
-	} from "./data";
+  } from "./data";
 
 const DATE_STRING_BOUND = 24;
 
@@ -66,7 +66,7 @@ export function displayTaskNote(e) {
 		e.currentTarget.querySelector('.task-description').remove();
 		e.currentTarget.querySelector('.task-note').remove();
 	}
-};
+}
 
 
 export const getChecklistTitle = () => {
@@ -507,7 +507,7 @@ const getPeriodOfTheDay = () => {
 		minute: '2-digit',
 		second: '2-digit',
 	});
-	let period = localeTime.split(' ')[1] 
+	let period = localeTime.split(' ')[1]; 
 
 	if (period ==  "AM")
 		return "morning";
@@ -531,7 +531,7 @@ const removeTask = (taskTitle) => {
 	}
 
 	setData("tasks", tasks);
-}
+};
 
 const setTaskComplete = (e) => {
 	const target = e.currentTarget.parentElement;
@@ -541,13 +541,13 @@ const setTaskComplete = (e) => {
 	removeTask(targetTask);
 	target.remove();
 	refreshPage();
-}
+};
 
 const today = () => {
 	let d = new Date().toLocaleDateString().split('/');
 
 	return `${d[2]}-${(d[0] < 10) ? `0${d[0]}` : d[0]}-${(d[1] < 10) ? `0${d[1]}` : d[1]}`;
-}
+};
 
 export let inputDay = "";
 const setTheDay = (e) => {
@@ -564,7 +564,7 @@ const setTheDay = (e) => {
 	}
 	else
 		inputDay = today();
-}
+};
 
 export { removeUserList, addFolder, removeForm, displayListForm, displaySidebar, getMyDayTasks, setTaskComplete, today };
 

@@ -13,7 +13,6 @@ import {
 	getMyDayTasks, 
 	setTaskComplete, 
 	today, 
-	getDay, 
 	inputDay, 
 	weekTasksCount, 
 	getListTasks, 
@@ -222,7 +221,7 @@ export class ListForm {
 		this.btnWrapper.classList.add('btn-wrapper');
 		this.btnSave = document.createElement('button');
 		this.btnSave.id = 'add-list-btn';
-		this.btnSave.textContent = 'Save'
+		this.btnSave.textContent = 'Save';
 		this.btnSave.addEventListener('click', addFolder);
 		this.btnWrapper.appendChild(this.btnSave);
 
@@ -282,8 +281,11 @@ export class TaskForm {
 					wrapper.appendChild(input);
 					break;
 				}
-				case "Checklist":
+				case "Checklist": {
 					input.value = getChecklistTitle();
+					wrapper.appendChild(input);
+					break;
+				}
 				default:
 					wrapper.appendChild(input);
 					break;
@@ -299,7 +301,7 @@ export class TaskForm {
 		this.btnWrapper.classList.add('btn-wrapper');
 
 		this.btnSave.id = 'add-task-btn';
-		this.btnSave.textContent = 'Save'
+		this.btnSave.textContent = 'Save';
 		this.btnSave.addEventListener('click', addTask);
 		this.btnWrapper.appendChild(this.btnSave);
 
